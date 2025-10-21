@@ -1,0 +1,70 @@
+{
+  "placeholderImages": [
+    {
+      "id": "user-avatar-1",
+      "description": "Profile picture of a user",
+      "imageUrl": "https://images.unsplash.com/photo-1609542449464-48e229fdbc7a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxwb3J0cmFpdCUyMHBlcnNvbnxlbnwwfHx8fDE3NjA5NjM3NTV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "portrait person"
+    },
+    {
+      "id": "user-avatar-2",
+      "description": "Profile picture of another user",
+      "imageUrl": "https://images.unsplash.com/photo-1561740303-a0fd9fabc646?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxwb3J0cmFpdCUyMHBlcnNvbnxlbnwwfHx8fDE3NjA5NjM3NTV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "portrait person"
+    },
+    {
+      "id": "user-avatar-3",
+      "description": "Profile picture of a third user",
+      "imageUrl": "https://images.unsplash.com/photo-1708426238272-994fcddabca4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxwb3J0cmFpdCUyMHBlcnNvbnxlbnwwfHx8fDE3NjA5NjM3NTV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "portrait person"
+    },
+    {
+      "id": "user-avatar-4",
+      "description": "Profile picture of a fourth user",
+      "imageUrl": "https://images.unsplash.com/photo-1548063111-005357d141d0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8cG9ydHJhaXQlMjBwZXJzb258ZW58MHx8fHwxNzYwOTYzNzU1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "portrait person"
+    },
+    {
+      "id": "user-avatar-5",
+      "description": "Profile picture of a fifth user",
+      "imageUrl": "https://images.unsplash.com/photo-1580893472468-01373fe4c97e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxwb3J0cmFpdCUyMHBlcnNvbnxlbnwwfHx8fDE3NjA5NjM3NTV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "portrait person"
+    },
+    {
+      "id": "artisan-1",
+      "description": "An artisan working on pottery",
+      "imageUrl": "https://images.unsplash.com/photo-1642582652683-a67f1cfa0fbb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxwb3R0ZXJ5JTIwY3JhZnR8ZW58MHx8fHwxNzYwOTk0NzE3fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "pottery craft"
+    },
+    {
+      "id": "artisan-2",
+      "description": "An artisan weaving a textile",
+      "imageUrl": "https://images.unsplash.com/photo-1598616068517-c75ad397a436?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHx3ZWF2aW5nJTIwbG9vbXxlbnwwfHx8fDE3NjA5OTQ3MTd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "weaving loom"
+    },
+    {
+      "id": "artisan-3",
+      "description": "An artisan carving wood",
+      "imageUrl": "https://images.unsplash.com/photo-1598581415509-af28687de862?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHx3b29kJTIwY2FydmluZ3xlbnwwfHx8fDE3NjA5NjY1Njl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "wood carving"
+    },
+    {
+      "id": "artisan-4",
+      "description": "An artisan making jewelry",
+      "imageUrl": "https://images.unsplash.com/photo-1624588057318-5f1b2eb81012?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxqZXdlbHJ5JTIwbWFraW5nfGVufDB8fHx8MTc2MDk5NDcxN3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "jewelry making"
+    },
+    {
+      "id": "hero-image",
+      "description": "A vibrant collage of rural indian life and crafts",
+      "imageUrl": "https://images.unsplash.com/photo-1719339837812-935906a68c5f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8aW5kaWFuJTIwdmlsbGFnZXxlbnwwfHx8fDE3NjA5MzQ2Njh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "indian village"
+    },
+    {
+      "id": "logo",
+      "description": "Logo for BharatLink",
+      "imageUrl": "/logo.svg",
+      "imageHint": "logo"
+    }
+  ]
+}
