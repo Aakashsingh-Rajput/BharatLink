@@ -1,0 +1,155 @@
+{
+  "employer": {
+    "id": "emp-1",
+    "name": "EcoVastra Textiles",
+    "email": "hr@ecovastra.com",
+    "company": "EcoVastra",
+    "location": "Mumbai, Maharashtra",
+    "description": "Sustainable fashion brand focused on traditional Indian textiles",
+    "avatarUrl": "https://picsum.photos/seed/employer1/100/100"
+  },
+  "jobPosts": [
+    {
+      "id": "job-1",
+      "title": "Senior Textile Designer",
+      "description": "Looking for an experienced textile designer with knowledge of traditional Indian printing techniques for our new sustainable clothing line.",
+      "location": "Remote/Mumbai",
+      "type": "Full-time",
+      "salary": "₹8,00,000 - ₹12,00,000",
+      "skillsRequired": ["Block Printing", "Textile Design", "Natural Dyes", "Adobe Creative Suite"],
+      "experience": "3-5 years",
+      "postedDate": "2024-01-15",
+      "status": "Active",
+      "applicantCount": 24,
+      "trustScore": 92
+    },
+    {
+      "id": "job-2",
+      "title": "Handicraft Sourcing Manager",
+      "description": "We need a sourcing expert to identify and partner with high-quality handicraft artisans across Rajasthan and Gujarat.",
+      "location": "Remote/Delhi",
+      "type": "Full-time",
+      "salary": "₹6,00,000 - ₹10,00,000",
+      "skillsRequired": ["Handicraft Marketing", "Negotiation", "Quality Control", "Supply Chain Management"],
+      "experience": "2-4 years",
+      "postedDate": "2024-01-10",
+      "status": "Active",
+      "applicantCount": 18,
+      "trustScore": 85
+    },
+    {
+      "id": "job-3",
+      "title": "Craft Workshop Coordinator",
+      "description": "Looking for someone to coordinate craft workshops for tourists and design students on traditional Indian crafts.",
+      "location": "Jaipur, Rajasthan",
+      "type": "Part-time",
+      "salary": "₹25,000 - ₹40,000",
+      "skillsRequired": ["Event Management", "Communication", "Teaching", "Craft Knowledge"],
+      "experience": "1-3 years",
+      "postedDate": "2024-01-08",
+      "status": "Closed",
+      "applicantCount": 12,
+      "trustScore": 88
+    }
+  ],
+  "applicants": [
+    {
+      "id": "app-1",
+      "name": "Priya Sharma",
+      "email": "priya.sharma@email.com",
+      "location": "Delhi, India",
+      "skills": ["Textile Design", "Natural Dyes", "Adobe Creative Suite", "Pattern Making"],
+      "experience": "4 years",
+      "education": "B.Des in Textile Design",
+      "avatarUrl": "https://picsum.photos/seed/applicant1/100/100",
+      "appliedDate": "2024-01-16",
+      "status": "Under Review",
+      "jobId": "job-1",
+      "portfolio": "https://portfolio.priyasharma.com",
+      "rating": 4.5,
+      "endorsements": 8
+    },
+    {
+      "id": "app-2",
+      "name": "Rajesh Kumar",
+      "email": "rajesh.kumar@email.com",
+      "location": "Jaipur, Rajasthan",
+      "skills": ["Block Printing", "Handicraft Marketing", "Quality Control", "Traditional Crafts"],
+      "experience": "6 years",
+      "education": "Diploma in Handicrafts",
+      "avatarUrl": "https://picsum.photos/seed/applicant2/100/100",
+      "appliedDate": "2024-01-15",
+      "status": "Interview Scheduled",
+      "jobId": "job-2",
+      "portfolio": "https://rajeshhandicrafts.in",
+      "rating": 4.8,
+      "endorsements": 12
+    },
+    {
+      "id": "app-3",
+      "name": "Anita Patel",
+      "email": "anita.patel@email.com",
+      "location": "Ahmedabad, Gujarat",
+      "skills": ["Event Management", "Communication", "Teaching", "Traditional Crafts"],
+      "experience": "3 years",
+      "education": "B.A. in Fine Arts",
+      "avatarUrl": "https://picsum.photos/seed/applicant3/100/100",
+      "appliedDate": "2024-01-12",
+      "status": "Rejected",
+      "jobId": "job-3",
+      "portfolio": "https://anitapatel.art",
+      "rating": 4.2,
+      "endorsements": 6
+    },
+    {
+      "id": "app-4",
+      "name": "Suresh Mehta",
+      "email": "suresh.mehta@email.com",
+      "location": "Mumbai, Maharashtra",
+      "skills": ["Textile Design", "Pattern Making", "Color Theory", "Adobe Creative Suite"],
+      "experience": "5 years",
+      "education": "M.Des in Textile Design",
+      "avatarUrl": "https://picsum.photos/seed/applicant4/100/100",
+      "appliedDate": "2024-01-14",
+      "status": "Under Review",
+      "jobId": "job-1",
+      "portfolio": "https://sureshmehta.design",
+      "rating": 4.6,
+      "endorsements": 10
+    }
+  ],
+  "dashboardStats": {
+    "totalJobPosts": 3,
+    "activeJobPosts": 2,
+    "totalApplicants": 54,
+    "newApplicants": 8,
+    "interviewScheduled": 5,
+    "hired": 2,
+    "averageRating": 4.5,
+    "responseTime": "2.3 days"
+  },
+  "recentActivity": [
+    {
+      "id": "act-1",
+      "type": "application",
+      "message": "New application received for Senior Textile Designer position",
+      "timestamp": "2024-01-16T10:30:00Z",
+      "applicantName": "Priya Sharma"
+    },
+    {
+      "id": "act-2",
+      "type": "interview",
+      "message": "Interview scheduled with Rajesh Kumar for tomorrow",
+      "timestamp": "2024-01-15T14:20:00Z",
+      "applicantName": "Rajesh Kumar"
+    },
+    {
+      "id": "act-3",
+      "type": "job_post",
+      "message": "New job posting published: Senior Textile Designer",
+      "timestamp": "2024-01-15T09:00:00Z",
+      "applicantName": null
+    }
+  ]
+}
+
