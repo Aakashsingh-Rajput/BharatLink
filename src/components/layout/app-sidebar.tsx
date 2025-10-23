@@ -16,6 +16,7 @@ import {
   Handshake,
   Bell,
   Settings,
+  Building2,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -29,6 +30,7 @@ const menuItems = [
   { href: "/opportunities", label: "Opportunities", icon: Briefcase },
   { href: "/map", label: "Skill Map", icon: Map },
   { href: "/collaboration", label: "Collaboration Hub", icon: Handshake },
+  { href: "/employer", label: "Employer Dashboard", icon: Building2 },
 ];
 
 export function AppSidebar() {

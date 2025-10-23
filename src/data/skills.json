@@ -1,0 +1,153 @@
+{
+  "skillCategories": [
+    {
+      "id": "textiles",
+      "name": "Textiles & Fabrics",
+      "description": "Traditional textile arts and fabric production",
+      "icon": "🧵",
+      "skills": [
+        {
+          "id": "block-printing",
+          "name": "Block Printing",
+          "description": "Traditional hand-block printing techniques including Bagru, Sanganeri, and Ajrakh",
+          "regions": [
+            { "state": "Rajasthan", "cities": ["Jaipur", "Bagru", "Sanganer"], "coordinates": { "lat": 26.9124, "lng": 75.7873 } },
+            { "state": "Gujarat", "cities": ["Ahmedabad", "Kutch"], "coordinates": { "lat": 23.0225, "lng": 72.5714 } }
+          ],
+          "demand": "high",
+          "averageSalary": "₹25,000 - ₹50,000",
+          "artisanCount": 1250
+        },
+        {
+          "id": "natural-dyes",
+          "name": "Natural Dyes",
+          "description": "Traditional dyeing techniques using natural materials and plant-based colors",
+          "regions": [
+            { "state": "Rajasthan", "cities": ["Jaipur", "Jodhpur"], "coordinates": { "lat": 26.2389, "lng": 73.0243 } },
+            { "state": "Tamil Nadu", "cities": ["Madurai", "Kanchipuram"], "coordinates": { "lat": 9.9252, "lng": 78.1198 } }
+          ],
+          "demand": "medium",
+          "averageSalary": "₹20,000 - ₹40,000",
+          "artisanCount": 890
+        },
+        {
+          "id": "embroidery",
+          "name": "Embroidery",
+          "description": "Various traditional embroidery styles including Kutch, Chikankari, and Phulkari",
+          "regions": [
+            { "state": "Gujarat", "cities": ["Kutch", "Ahmedabad"], "coordinates": { "lat": 23.7338, "lng": 69.8597 } },
+            { "state": "Uttar Pradesh", "cities": ["Lucknow"], "coordinates": { "lat": 26.8467, "lng": 80.9462 } },
+            { "state": "Punjab", "cities": ["Amritsar", "Patiala"], "coordinates": { "lat": 31.6340, "lng": 74.8723 } }
+          ],
+          "demand": "high",
+          "averageSalary": "₹22,000 - ₹45,000",
+          "artisanCount": 2100
+        }
+      ]
+    },
+    {
+      "id": "pottery",
+      "name": "Pottery & Ceramics",
+      "description": "Traditional pottery and ceramic arts",
+      "icon": "🏺",
+      "skills": [
+        {
+          "id": "blue-pottery",
+          "name": "Blue Pottery",
+          "description": "Traditional Turko-Persian art form of blue pottery",
+          "regions": [
+            { "state": "Rajasthan", "cities": ["Jaipur"], "coordinates": { "lat": 26.9124, "lng": 75.7873 } }
+          ],
+          "demand": "medium",
+          "averageSalary": "₹18,000 - ₹35,000",
+          "artisanCount": 450
+        },
+        {
+          "id": "terracotta",
+          "name": "Terracotta",
+          "description": "Traditional clay pottery and sculpture making",
+          "regions": [
+            { "state": "West Bengal", "cities": ["Kolkata", "Bishnupur"], "coordinates": { "lat": 22.9868, "lng": 87.8550 } },
+            { "state": "Tamil Nadu", "cities": ["Chennai", "Madurai"], "coordinates": { "lat": 13.0827, "lng": 80.2707 } }
+          ],
+          "demand": "high",
+          "averageSalary": "₹15,000 - ₹30,000",
+          "artisanCount": 1200
+        }
+      ]
+    },
+    {
+      "id": "woodwork",
+      "name": "Woodwork & Carving",
+      "description": "Traditional woodworking and carving arts",
+      "icon": "🪵",
+      "skills": [
+        {
+          "id": "wood-carving",
+          "name": "Wood Carving",
+          "description": "Traditional wood carving techniques and furniture making",
+          "regions": [
+            { "state": "Uttar Pradesh", "cities": ["Saharanpur", "Lucknow"], "coordinates": { "lat": 29.9640, "lng": 77.5469 } },
+            { "state": "Karnataka", "cities": ["Mysore", "Bangalore"], "coordinates": { "lat": 12.2958, "lng": 76.6394 } }
+          ],
+          "demand": "medium",
+          "averageSalary": "₹20,000 - ₹40,000",
+          "artisanCount": 750
+        },
+        {
+          "id": "channapatna-toys",
+          "name": "Channapatna Toys",
+          "description": "Traditional lacquered wooden toys from Karnataka",
+          "regions": [
+            { "state": "Karnataka", "cities": ["Channapatna", "Bangalore"], "coordinates": { "lat": 12.6504, "lng": 77.2140 } }
+          ],
+          "demand": "medium",
+          "averageSalary": "₹16,000 - ₹32,000",
+          "artisanCount": 320
+        }
+      ]
+    },
+    {
+      "id": "painting",
+      "name": "Painting & Art",
+      "description": "Traditional painting and folk art forms",
+      "icon": "🎨",
+      "skills": [
+        {
+          "id": "madhubani",
+          "name": "Madhubani Painting",
+          "description": "Traditional folk paintings from the Mithila region",
+          "regions": [
+            { "state": "Bihar", "cities": ["Madhubani", "Darbhanga"], "coordinates": { "lat": 26.3539, "lng": 86.0747 } }
+          ],
+          "demand": "high",
+          "averageSalary": "₹20,000 - ₹45,000",
+          "artisanCount": 680
+        },
+        {
+          "id": "pattachitra",
+          "name": "Pattachitra Painting",
+          "description": "Traditional cloth-based scroll painting from Odisha",
+          "regions": [
+            { "state": "Odisha", "cities": ["Puri", "Bhubaneswar"], "coordinates": { "lat": 20.2961, "lng": 85.8245 } }
+          ],
+          "demand": "medium",
+          "averageSalary": "₹18,000 - ₹38,000",
+          "artisanCount": 420
+        }
+      ]
+    }
+  ],
+  "statistics": {
+    "totalArtisans": 8960,
+    "totalSkills": 11,
+    "averageSalary": "₹22,500",
+    "topRegions": [
+      { "state": "Rajasthan", "artisanCount": 2450, "percentage": 27.3 },
+      { "state": "Gujarat", "artisanCount": 1890, "percentage": 21.1 },
+      { "state": "Tamil Nadu", "artisanCount": 1420, "percentage": 15.8 },
+      { "state": "Uttar Pradesh", "artisanCount": 1180, "percentage": 13.2 },
+      { "state": "Karnataka", "artisanCount": 1070, "percentage": 11.9 }
+    ]
+  }
+}
