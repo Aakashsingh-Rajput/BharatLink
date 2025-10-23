@@ -460,3 +460,4 @@ export function EnhancedSkillMap() {
     </div>
   );
 }
+

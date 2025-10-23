@@ -285,3 +285,4 @@ export function ApplicantList({ applicants, onStatusChange, onViewProfile }: App
     </Card>
   );
 }
+
