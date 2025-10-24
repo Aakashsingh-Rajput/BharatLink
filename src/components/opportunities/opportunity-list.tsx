@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   suggestRelevantOpportunities,
   type RelevantOpportunitiesOutput,
@@ -12,11 +12,47 @@ import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { AlertCircle } from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 
-export default function OpportunityList() {
-  const [opportunities, setOpportunities] =
+type OpportunityListProps = {
+  searchQuery?: string;
+  filters?: string[];
+};
+
+export default function OpportunityList({ searchQuery = "", filters = [] }: OpportunityListProps) {
+  const [allOpportunities, setAllOpportunities] =
     useState<RelevantOpportunitiesOutput["opportunities"] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Filter opportunities based on search query and filters
+  const filteredOpportunities = useMemo(() => {
+    if (!allOpportunities) return null;
+
+    let filtered = allOpportunities;
+
+    // Apply search filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(opportunity =>
+        opportunity.title.toLowerCase().includes(query) ||
+        opportunity.description.toLowerCase().includes(query) ||
+        opportunity.skillsRequired.some(skill => 
+          skill.toLowerCase().includes(query)
+        ) ||
+        opportunity.company.toLowerCase().includes(query) ||
+        opportunity.location.toLowerCase().includes(query)
+      );
+    }
+
+    // Apply type filters
+    if (filters.length > 0) {
+      filtered = filtered.filter(opportunity => {
+        // This is a simplified filter - in a real app, you'd have job type data
+        return true; // For now, we'll show all opportunities
+      });
+    }
+
+    return filtered;
+  }, [allOpportunities, searchQuery, filters]);
 
   useEffect(() => {
     async function fetchOpportunities() {
@@ -30,7 +66,7 @@ export default function OpportunityList() {
           jobTypes: ["full-time", "contract", "part-time"],
           industry: "Handicrafts",
         });
-        setOpportunities(result.opportunities);
+        setAllOpportunities(result.opportunities);
       } catch (e) {
         setError("Failed to load opportunities. Please try again later.");
         console.error(e);
@@ -56,20 +92,35 @@ export default function OpportunityList() {
     );
   }
 
-  if (!opportunities || opportunities.length === 0) {
+  if (!filteredOpportunities || filteredOpportunities.length === 0) {
     return (
       <div className="text-center py-10 border border-dashed rounded-lg">
-        <h3 className="text-xl font-semibold font-headline">No Opportunities Found</h3>
+        <h3 className="text-xl font-semibold font-headline">
+          {searchQuery || filters.length > 0 ? "No Matching Opportunities Found" : "No Opportunities Found"}
+        </h3>
         <p className="text-muted-foreground mt-2">
-          We couldn't find any opportunities matching your profile right now.
+          {searchQuery || filters.length > 0 
+            ? "Try adjusting your search criteria or filters."
+            : "We couldn't find any opportunities matching your profile right now."
+          }
         </p>
+        {searchQuery && (
+          <div className="mt-4">
+            <p className="text-sm text-muted-foreground">Search results for: "{searchQuery}"</p>
+          </div>
+        )}
       </div>
     );
   }
 
   return (
     <div className="space-y-4">
-      {opportunities.map((opp, index) => (
+      {searchQuery && (
+        <div className="text-sm text-muted-foreground mb-4">
+          Showing {filteredOpportunities.length} result{filteredOpportunities.length !== 1 ? 's' : ''} for "{searchQuery}"
+        </div>
+      )}
+      {filteredOpportunities.map((opp, index) => (
         <OpportunityCard key={index} opportunity={opp} />
       ))}
     </div>

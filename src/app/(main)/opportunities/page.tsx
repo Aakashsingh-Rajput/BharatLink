@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -18,10 +20,13 @@ import {
 import { Input } from "@/components/ui/input";
 import OpportunityList from "@/components/opportunities/opportunity-list";
 import { ListFilter, Mic, Search } from "lucide-react";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function OpportunitiesPage() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+
   return (
     <div className="flex flex-col gap-8">
       <div>
@@ -40,6 +45,8 @@ export default function OpportunitiesPage() {
               <Input
                 placeholder="Search by title or skill..."
                 className="pl-8"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
               <Mic className="absolute right-2.5 top-2.5 h-4 w-4 text-muted-foreground hover:text-foreground cursor-pointer" />
             </div>
@@ -54,11 +61,42 @@ export default function OpportunitiesPage() {
                 <DropdownMenuContent align="end">
                   <DropdownMenuLabel>Filter by</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuCheckboxItem checked>
+                  <DropdownMenuCheckboxItem 
+                    checked={selectedFilters.includes('full-time')}
+                    onCheckedChange={(checked) => {
+                      if (checked) {
+                        setSelectedFilters([...selectedFilters, 'full-time']);
+                      } else {
+                        setSelectedFilters(selectedFilters.filter(f => f !== 'full-time'));
+                      }
+                    }}
+                  >
                     Full-time
                   </DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem>Part-time</DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem>Contract</DropdownMenuCheckboxItem>
+                  <DropdownMenuCheckboxItem 
+                    checked={selectedFilters.includes('part-time')}
+                    onCheckedChange={(checked) => {
+                      if (checked) {
+                        setSelectedFilters([...selectedFilters, 'part-time']);
+                      } else {
+                        setSelectedFilters(selectedFilters.filter(f => f !== 'part-time'));
+                      }
+                    }}
+                  >
+                    Part-time
+                  </DropdownMenuCheckboxItem>
+                  <DropdownMenuCheckboxItem 
+                    checked={selectedFilters.includes('contract')}
+                    onCheckedChange={(checked) => {
+                      if (checked) {
+                        setSelectedFilters([...selectedFilters, 'contract']);
+                      } else {
+                        setSelectedFilters(selectedFilters.filter(f => f !== 'contract'));
+                      }
+                    }}
+                  >
+                    Contract
+                  </DropdownMenuCheckboxItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
@@ -66,7 +104,7 @@ export default function OpportunitiesPage() {
         </CardHeader>
         <CardContent>
           <Suspense fallback={<OpportunityListSkeleton />}>
-            <OpportunityList />
+            <OpportunityList searchQuery={searchQuery} filters={selectedFilters} />
           </Suspense>
         </CardContent>
       </Card>
