@@ -79,6 +79,16 @@ interface SkillCategory {
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D'];
 
+// Utility function to ensure proper rupee symbol display
+const formatRupeeAmount = (amount: string) => {
+  return `₹${amount.replace('₹', '')}`;
+};
+
+// Component for displaying rupee amounts with proper styling
+const RupeeAmount = ({ amount }: { amount: string }) => (
+  <span className="font-mono rupee-symbol">{formatRupeeAmount(amount)}</span>
+);
+
 const chartConfig = {
   artisanCount: {
     label: "Artisan Count",
@@ -243,7 +253,7 @@ export function EnhancedSkillMap() {
                               </span>
                               <span className="flex items-center gap-1">
                                 <TrendingUp className="h-3 w-3" />
-                                {skill.averageSalary}
+                                <RupeeAmount amount={skill.averageSalary} />
                               </span>
                             </div>
                           </div>
@@ -297,7 +307,7 @@ export function EnhancedSkillMap() {
                   </div>
                 </div>
                 <div className="text-center p-3 bg-primary/10 rounded-lg">
-                  <div className="text-lg font-bold">{skillsData.statistics.averageSalary}</div>
+                  <div className="text-lg font-bold"><RupeeAmount amount={skillsData.statistics.averageSalary} /></div>
                   <div className="text-xs text-muted-foreground">Average Salary</div>
                 </div>
               </CardContent>
@@ -443,7 +453,7 @@ export function EnhancedSkillMap() {
                         </div>
                         <div className="flex items-center gap-1">
                           <TrendingUp className="h-4 w-4" />
-                          {skill.averageSalary}
+                          <RupeeAmount amount={skill.averageSalary} />
                         </div>
                         <Badge variant={skill.demand === 'high' ? 'default' : skill.demand === 'medium' ? 'secondary' : 'outline'}>
                           {skill.demand} demand
