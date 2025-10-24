@@ -24,6 +24,7 @@ import { speechToText } from "@/ai/flows/speech-to-text";
 import { ChakraLoader } from "../ui/loader";
 import { useAuth } from "@/contexts/auth-context";
 import Link from "next/link";
+import { LanguageSelector } from "./language-selector";
 
 export function AppHeader() {
   const { user, logout, isAuthenticated } = useAuth();
@@ -104,6 +105,7 @@ export function AppHeader() {
       </div>
       {isAuthenticated ? (
         <>
+          <LanguageSelector />
           <Button variant="ghost" size="icon" className="rounded-full">
             <Bell className="h-5 w-5" />
             <span className="sr-only">Toggle notifications</span>
@@ -133,6 +135,7 @@ export function AppHeader() {
         </>
       ) : (
         <div className="flex items-center gap-2">
+          <LanguageSelector />
           <Button variant="ghost" asChild>
             <Link href="/auth/signin">Sign In</Link>
           </Button>

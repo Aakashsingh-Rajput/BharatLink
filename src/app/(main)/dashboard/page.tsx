@@ -19,6 +19,7 @@ import {
   ChartConfig,
 } from "@/components/ui/chart";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { useTranslation } from "@/contexts/translation-context";
 
 const chartData = [
   { skill: "Printing", endorsements: 12, fill: "var(--color-printing)" },
@@ -50,14 +51,16 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export default function DashboardPage() {
+  const { t } = useTranslation();
+  
   return (
     <div className="flex flex-col gap-8">
       <div>
         <h1 className="text-3xl font-bold font-headline">
-          Welcome back, {currentUser.name.split(" ")[0]}!
+          {t('dashboard.welcome')}, {currentUser.name.split(" ")[0]}!
         </h1>
         <p className="text-muted-foreground">
-          Here's your gateway to new opportunities and collaborations.
+          {t('dashboard.gateway')}
         </p>
       </div>
 
@@ -65,48 +68,48 @@ export default function DashboardPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Profile Strength
+              {t('dashboard.profile_strength')}
             </CardTitle>
             <UserCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">Strong</div>
+            <div className="text-2xl font-bold">{t('dashboard.strong')}</div>
             <p className="text-xs text-muted-foreground">
-              Based on your skills and endorsements
+              {t('dashboard.based_on_skills')}
             </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Endorsements</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('dashboard.total_endorsements')}</CardTitle>
             <Star className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{currentUser.endorsements.length}</div>
-            <p className="text-xs text-muted-foreground">From peers and employers</p>
+            <p className="text-xs text-muted-foreground">{t('dashboard.from_peers')}</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Skill Hotspot</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('dashboard.skill_hotspot')}</CardTitle>
             <Map className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">Jaipur</div>
-            <p className="text-xs text-muted-foreground">Top region for your skills</p>
+            <p className="text-xs text-muted-foreground">{t('dashboard.top_region')}</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Collaboration Requests
+              {t('dashboard.collaboration_requests')}
             </CardTitle>
             <Handshake className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">3</div>
             <p className="text-xs text-muted-foreground">
-              New inquiries this month
+              {t('dashboard.new_inquiries')}
             </p>
           </CardContent>
         </Card>
@@ -116,9 +119,9 @@ export default function DashboardPage() {
         <div className="lg:col-span-3">
           <Card>
             <CardHeader>
-              <CardTitle className="font-headline">Recommended Opportunities</CardTitle>
+              <CardTitle className="font-headline">{t('dashboard.recommended_opportunities')}</CardTitle>
               <CardDescription>
-                AI-powered matches based on your profile.
+                {t('dashboard.ai_matches')}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -126,7 +129,7 @@ export default function DashboardPage() {
                 <OpportunityCard key={opp.id} opportunity={opp} />
               ))}
               <Button variant="outline" className="w-full" asChild>
-                <Link href="/opportunities">View All Opportunities</Link>
+                <Link href="/opportunities">{t('dashboard.view_all_opportunities')}</Link>
               </Button>
             </CardContent>
           </Card>
@@ -134,9 +137,9 @@ export default function DashboardPage() {
         <div className="lg:col-span-2">
           <Card>
             <CardHeader>
-              <CardTitle className="font-headline">Skill Endorsements</CardTitle>
+              <CardTitle className="font-headline">{t('dashboard.skill_endorsements')}</CardTitle>
               <CardDescription>
-                A visual breakdown of your endorsements by skill.
+                {t('dashboard.visual_breakdown')}
               </CardDescription>
             </CardHeader>
             <CardContent>

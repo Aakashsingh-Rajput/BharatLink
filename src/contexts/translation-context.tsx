@@ -8,6 +8,7 @@ interface TranslationContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
   t: (key: string) => string;
+  isHydrated: boolean;
 }
 
 const TranslationContext = createContext<TranslationContextType | undefined>(undefined);
@@ -78,7 +79,131 @@ const translations = {
     
     // Footer
     'footer.copyright': 'All rights reserved.',
-    'footer.project': 'A proud *Innovinkers* project.'
+    'footer.project': 'A proud *Innovinkers* project.',
+    
+    // Auth Pages
+    'auth.welcome_back': 'Welcome back to India\'s skill-to-work network',
+    'auth.join_network': 'Join India\'s skill-to-work network',
+    'auth.signin': 'Sign In',
+    'auth.signup': 'Create Account',
+    'auth.access_account': 'Access your account to continue your journey',
+    'auth.start_journey': 'Start your journey to connect skills with opportunities',
+    'auth.email': 'Email Address',
+    'auth.password': 'Password',
+    'auth.full_name': 'Full Name',
+    'auth.phone': 'Phone Number',
+    'auth.location': 'Location',
+    'auth.confirm_password': 'Confirm Password',
+    'auth.remember_me': 'Remember me',
+    'auth.forgot_password': 'Forgot password?',
+    'auth.signing_in': 'Signing in...',
+    'auth.creating_account': 'Creating account...',
+    'auth.dont_have_account': 'Don\'t have an account?',
+    'auth.create_one': 'Create one now',
+    'auth.already_have_account': 'Already have an account?',
+    'auth.sign_in_here': 'Sign in here',
+    'auth.continue_with': 'Or continue with',
+    'auth.back_to_home': '← Back to home',
+    'auth.artisan_worker': 'Artisan/Skilled Worker',
+    'auth.employer_business': 'Employer/Business',
+    'auth.terms_agree': 'I agree to the',
+    'auth.terms_service': 'Terms of Service',
+    'auth.privacy_policy': 'Privacy Policy',
+    'auth.enter_email': 'Enter your email',
+    'auth.enter_password': 'Enter your password',
+    'auth.enter_name': 'Enter your full name',
+    'auth.enter_phone': 'Enter your phone number',
+    'auth.enter_location': 'City, State',
+    'auth.create_password': 'Create a password',
+    'auth.confirm_your_password': 'Confirm your password',
+    'auth.fill_all_fields': 'Please fill in all fields',
+    'auth.fill_required_fields': 'Please fill in all required fields',
+    'auth.passwords_no_match': 'Passwords do not match',
+    'auth.password_length': 'Password must be at least 6 characters long',
+    'auth.invalid_credentials': 'Invalid credentials. Please try again.',
+    'auth.failed_create': 'Failed to create account. Please try again.',
+    
+    // Dashboard
+    'dashboard.welcome': 'Welcome back',
+    'dashboard.gateway': 'Here\'s your gateway to new opportunities and collaborations.',
+    'dashboard.profile_strength': 'Profile Strength',
+    'dashboard.strong': 'Strong',
+    'dashboard.based_on_skills': 'Based on your skills and endorsements',
+    'dashboard.total_endorsements': 'Total Endorsements',
+    'dashboard.from_peers': 'From peers and employers',
+    'dashboard.skill_hotspot': 'Skill Hotspot',
+    'dashboard.top_region': 'Top region for your skills',
+    'dashboard.collaboration_requests': 'Collaboration Requests',
+    'dashboard.new_inquiries': 'New inquiries this month',
+    'dashboard.recommended_opportunities': 'Recommended Opportunities',
+    'dashboard.ai_matches': 'AI-powered matches based on your profile.',
+    'dashboard.view_all_opportunities': 'View All Opportunities',
+    'dashboard.skill_endorsements': 'Skill Endorsements',
+    'dashboard.visual_breakdown': 'A visual breakdown of your endorsements by skill.',
+    
+    // Navigation
+    'nav.dashboard': 'Dashboard',
+    'nav.opportunities': 'Opportunities',
+    'nav.map': 'Map',
+    'nav.collaboration': 'Collaboration',
+    'nav.profile': 'Profile',
+    'nav.settings': 'Settings',
+    'nav.employer': 'Employer',
+    'nav.logout': 'Logout',
+    
+    // Common
+    'common.loading': 'Loading...',
+    'common.save': 'Save',
+    'common.cancel': 'Cancel',
+    'common.edit': 'Edit',
+    'common.delete': 'Delete',
+    'common.view': 'View',
+    'common.search': 'Search',
+    'common.filter': 'Filter',
+    'common.sort': 'Sort',
+    'common.apply': 'Apply',
+    'common.clear': 'Clear',
+    'common.back': 'Back',
+    'common.next': 'Next',
+    'common.previous': 'Previous',
+    'common.submit': 'Submit',
+    'common.close': 'Close',
+    'common.open': 'Open',
+    'common.yes': 'Yes',
+    'common.no': 'No',
+    'common.ok': 'OK',
+    'common.error': 'Error',
+    'common.success': 'Success',
+    'common.warning': 'Warning',
+    'common.info': 'Info',
+    // Opportunities
+    'opportunities.title': 'Find Your Next Opportunity',
+    'opportunities.subtitle': 'Browse jobs, projects, and collaboration requests tailored for you.',
+    'opportunities.search_placeholder': 'Search by title or skill...',
+    'opportunities.filter': 'Filter',
+    'opportunities.filter_by': 'Filter by',
+    'opportunities.full_time': 'Full-time',
+    'opportunities.part_time': 'Part-time',
+    'opportunities.contract': 'Contract',
+    // Employer Dashboard
+    'employer.dashboard_title': 'Employer Dashboard',
+    'employer.welcome_message': 'Welcome back to {company}! Manage your job posts and applicants.',
+    'employer.post_new_job': 'Post New Job',
+    'employer.overview': 'Overview',
+    'employer.job_posts': 'Job Posts',
+    'employer.applicants': 'Applicants',
+    'employer.analytics': 'Analytics',
+    'employer.recent_job_posts': 'Recent Job Posts',
+    'employer.recent_job_posts_desc': 'Your latest job postings and their performance',
+    // Profile
+    'profile.contact': 'Contact',
+    'profile.share': 'Share',
+    'profile.about': 'About',
+    'profile.skills': 'Skills',
+    'profile.add_skills_voice': 'Add Skills with Voice',
+    'profile.no_skills_yet': 'No skills added yet. Use the voice input to add your skills!',
+    'profile.endorsements': 'Endorsements',
+    'profile.no_endorsements_yet': 'No endorsements yet. Build your network to get endorsements!'
   },
   hi: {
     // Header
@@ -144,7 +269,131 @@ const translations = {
     
     // Footer
     'footer.copyright': 'सभी अधिकार सुरक्षित।',
-    'footer.project': 'एक गर्वित *इनोविंकर्स* परियोजना।'
+    'footer.project': 'एक गर्वित *इनोविंकर्स* परियोजना।',
+    
+    // Auth Pages
+    'auth.welcome_back': 'भारत के कौशल-से-काम नेटवर्क में वापस स्वागत है',
+    'auth.join_network': 'भारत के कौशल-से-काम नेटवर्क में शामिल हों',
+    'auth.signin': 'साइन इन',
+    'auth.signup': 'खाता बनाएं',
+    'auth.access_account': 'अपनी यात्रा जारी रखने के लिए अपने खाते तक पहुंचें',
+    'auth.start_journey': 'कौशल को अवसरों से जोड़ने की अपनी यात्रा शुरू करें',
+    'auth.email': 'ईमेल पता',
+    'auth.password': 'पासवर्ड',
+    'auth.full_name': 'पूरा नाम',
+    'auth.phone': 'फोन नंबर',
+    'auth.location': 'स्थान',
+    'auth.confirm_password': 'पासवर्ड की पुष्टि करें',
+    'auth.remember_me': 'मुझे याद रखें',
+    'auth.forgot_password': 'पासवर्ड भूल गए?',
+    'auth.signing_in': 'साइन इन हो रहे हैं...',
+    'auth.creating_account': 'खाता बनाया जा रहा है...',
+    'auth.dont_have_account': 'खाता नहीं है?',
+    'auth.create_one': 'अभी बनाएं',
+    'auth.already_have_account': 'पहले से खाता है?',
+    'auth.sign_in_here': 'यहां साइन इन करें',
+    'auth.continue_with': 'या इसके साथ जारी रखें',
+    'auth.back_to_home': '← होम पर वापस जाएं',
+    'auth.artisan_worker': 'कारीगर/कुशल कर्मचारी',
+    'auth.employer_business': 'नियोक्ता/व्यवसाय',
+    'auth.terms_agree': 'मैं सहमत हूं',
+    'auth.terms_service': 'सेवा की शर्तें',
+    'auth.privacy_policy': 'गोपनीयता नीति',
+    'auth.enter_email': 'अपना ईमेल दर्ज करें',
+    'auth.enter_password': 'अपना पासवर्ड दर्ज करें',
+    'auth.enter_name': 'अपना पूरा नाम दर्ज करें',
+    'auth.enter_phone': 'अपना फोन नंबर दर्ज करें',
+    'auth.enter_location': 'शहर, राज्य',
+    'auth.create_password': 'पासवर्ड बनाएं',
+    'auth.confirm_your_password': 'अपने पासवर्ड की पुष्टि करें',
+    'auth.fill_all_fields': 'कृपया सभी फ़ील्ड भरें',
+    'auth.fill_required_fields': 'कृपया सभी आवश्यक फ़ील्ड भरें',
+    'auth.passwords_no_match': 'पासवर्ड मेल नहीं खाते',
+    'auth.password_length': 'पासवर्ड कम से कम 6 अक्षर का होना चाहिए',
+    'auth.invalid_credentials': 'अमान्य क्रेडेंशियल। कृपया फिर से कोशिश करें।',
+    'auth.failed_create': 'खाता बनाने में विफल। कृपया फिर से कोशिश करें।',
+    
+    // Dashboard
+    'dashboard.welcome': 'वापस स्वागत है',
+    'dashboard.gateway': 'यहां नए अवसरों और सहयोग के लिए आपका प्रवेश द्वार है।',
+    'dashboard.profile_strength': 'प्रोफ़ाइल शक्ति',
+    'dashboard.strong': 'मजबूत',
+    'dashboard.based_on_skills': 'आपके कौशल और समर्थन के आधार पर',
+    'dashboard.total_endorsements': 'कुल समर्थन',
+    'dashboard.from_peers': 'सहकर्मियों और नियोक्ताओं से',
+    'dashboard.skill_hotspot': 'कौशल हॉटस्पॉट',
+    'dashboard.top_region': 'आपके कौशल के लिए शीर्ष क्षेत्र',
+    'dashboard.collaboration_requests': 'सहयोग अनुरोध',
+    'dashboard.new_inquiries': 'इस महीने नए पूछताछ',
+    'dashboard.recommended_opportunities': 'अनुशंसित अवसर',
+    'dashboard.ai_matches': 'आपके प्रोफ़ाइल के आधार पर AI-संचालित मैच।',
+    'dashboard.view_all_opportunities': 'सभी अवसर देखें',
+    'dashboard.skill_endorsements': 'कौशल समर्थन',
+    'dashboard.visual_breakdown': 'कौशल के अनुसार आपके समर्थन का दृश्य विभाजन।',
+    
+    // Navigation
+    'nav.dashboard': 'डैशबोर्ड',
+    'nav.opportunities': 'अवसर',
+    'nav.map': 'नक्शा',
+    'nav.collaboration': 'सहयोग',
+    'nav.profile': 'प्रोफ़ाइल',
+    'nav.settings': 'सेटिंग्स',
+    'nav.employer': 'नियोक्ता',
+    'nav.logout': 'लॉगआउट',
+    
+    // Common
+    'common.loading': 'लोड हो रहा है...',
+    'common.save': 'सहेजें',
+    'common.cancel': 'रद्द करें',
+    'common.edit': 'संपादित करें',
+    'common.delete': 'हटाएं',
+    'common.view': 'देखें',
+    'common.search': 'खोजें',
+    'common.filter': 'फ़िल्टर',
+    'common.sort': 'क्रमबद्ध करें',
+    'common.apply': 'लागू करें',
+    'common.clear': 'साफ़ करें',
+    'common.back': 'वापस',
+    'common.next': 'अगला',
+    'common.previous': 'पिछला',
+    'common.submit': 'जमा करें',
+    'common.close': 'बंद करें',
+    'common.open': 'खोलें',
+    'common.yes': 'हाँ',
+    'common.no': 'नहीं',
+    'common.ok': 'ठीक है',
+    'common.error': 'त्रुटि',
+    'common.success': 'सफलता',
+    'common.warning': 'चेतावनी',
+    'common.info': 'जानकारी',
+    // Opportunities
+    'opportunities.title': 'अपना अगला अवसर खोजें',
+    'opportunities.subtitle': 'आपके लिए तैयार नौकरियों, परियोजनाओं और सहयोग अनुरोधों को ब्राउज़ करें।',
+    'opportunities.search_placeholder': 'शीर्षक या कौशल से खोजें...',
+    'opportunities.filter': 'फ़िल्टर',
+    'opportunities.filter_by': 'फ़िल्टर करें',
+    'opportunities.full_time': 'पूर्णकालिक',
+    'opportunities.part_time': 'अंशकालिक',
+    'opportunities.contract': 'अनुबंध',
+    // Employer Dashboard
+    'employer.dashboard_title': 'नियोक्ता डैशबोर्ड',
+    'employer.welcome_message': '{company} में वापस स्वागत है! अपनी नौकरी पोस्ट और आवेदकों का प्रबंधन करें।',
+    'employer.post_new_job': 'नई नौकरी पोस्ट करें',
+    'employer.overview': 'अवलोकन',
+    'employer.job_posts': 'नौकरी पोस्ट',
+    'employer.applicants': 'आवेदक',
+    'employer.analytics': 'विश्लेषण',
+    'employer.recent_job_posts': 'हाल की नौकरी पोस्ट',
+    'employer.recent_job_posts_desc': 'आपकी नवीनतम नौकरी पोस्टिंग और उनका प्रदर्शन',
+    // Profile
+    'profile.contact': 'संपर्क',
+    'profile.share': 'साझा करें',
+    'profile.about': 'के बारे में',
+    'profile.skills': 'कौशल',
+    'profile.add_skills_voice': 'आवाज़ से कौशल जोड़ें',
+    'profile.no_skills_yet': 'अभी तक कोई कौशल नहीं जोड़े गए। अपने कौशल जोड़ने के लिए आवाज़ इनपुट का उपयोग करें!',
+    'profile.endorsements': 'समर्थन',
+    'profile.no_endorsements_yet': 'अभी तक कोई समर्थन नहीं। समर्थन पाने के लिए अपना नेटवर्क बनाएं!'
   },
   kn: {
     // Header
@@ -210,7 +459,131 @@ const translations = {
     
     // Footer
     'footer.copyright': 'ಎಲ್ಲ ಹಕ್ಕುಗಳು ಕಾಯ್ದಿರಿಸಲಾಗಿವೆ.',
-    'footer.project': 'ಒಂದು ಹೆಮ್ಮೆಯ *ಇನ್ನೋವಿಂಕರ್ಸ್* ಯೋಜನೆ.'
+    'footer.project': 'ಒಂದು ಹೆಮ್ಮೆಯ *ಇನ್ನೋವಿಂಕರ್ಸ್* ಯೋಜನೆ.',
+    
+    // Auth Pages
+    'auth.welcome_back': 'ಭಾರತದ ಕೌಶಲ್ಯ-ಇಂದ-ಕೆಲಸ ನೆಟ್‌ವರ್ಕ್‌ಗೆ ಮತ್ತೆ ಸ್ವಾಗತ',
+    'auth.join_network': 'ಭಾರತದ ಕೌಶಲ್ಯ-ಇಂದ-ಕೆಲಸ ನೆಟ್‌ವರ್ಕ್‌ಗೆ ಸೇರಿ',
+    'auth.signin': 'ಸೈನ್ ಇನ್',
+    'auth.signup': 'ಖಾತೆ ರಚಿಸಿ',
+    'auth.access_account': 'ನಿಮ್ಮ ಪ್ರಯಾಣವನ್ನು ಮುಂದುವರಿಸಲು ನಿಮ್ಮ ಖಾತೆಗೆ ಪ್ರವೇಶಿಸಿ',
+    'auth.start_journey': 'ಕೌಶಲ್ಯಗಳನ್ನು ಅವಕಾಶಗಳೊಂದಿಗೆ ಸಂಪರ್ಕಿಸಲು ನಿಮ್ಮ ಪ್ರಯಾಣವನ್ನು ಪ್ರಾರಂಭಿಸಿ',
+    'auth.email': 'ಇಮೇಲ್ ವಿಳಾಸ',
+    'auth.password': 'ಪಾಸ್‌ವರ್ಡ್',
+    'auth.full_name': 'ಪೂರ್ಣ ಹೆಸರು',
+    'auth.phone': 'ಫೋನ್ ಸಂಖ್ಯೆ',
+    'auth.location': 'ಸ್ಥಳ',
+    'auth.confirm_password': 'ಪಾಸ್‌ವರ್ಡ್ ದೃಢೀಕರಿಸಿ',
+    'auth.remember_me': 'ನನ್ನನ್ನು ನೆನಪಿಡಿ',
+    'auth.forgot_password': 'ಪಾಸ್‌ವರ್ಡ್ ಮರೆತಿದ್ದೀರಾ?',
+    'auth.signing_in': 'ಸೈನ್ ಇನ್ ಆಗುತ್ತಿದೆ...',
+    'auth.creating_account': 'ಖಾತೆ ರಚಿಸಲಾಗುತ್ತಿದೆ...',
+    'auth.dont_have_account': 'ಖಾತೆ ಇಲ್ಲವೇ?',
+    'auth.create_one': 'ಈಗ ರಚಿಸಿ',
+    'auth.already_have_account': 'ಈಗಾಗಲೇ ಖಾತೆ ಇದೆಯೇ?',
+    'auth.sign_in_here': 'ಇಲ್ಲಿ ಸೈನ್ ಇನ್ ಮಾಡಿ',
+    'auth.continue_with': 'ಅಥವಾ ಇದರೊಂದಿಗೆ ಮುಂದುವರಿಸಿ',
+    'auth.back_to_home': '← ಮನೆಗೆ ಹಿಂತಿರುಗಿ',
+    'auth.artisan_worker': 'ಕಲಾಕಾರ/ಕುಶಲ ಕೆಲಸಗಾರ',
+    'auth.employer_business': 'ನೌಕರಿದಾರ/ವ್ಯವಹಾರ',
+    'auth.terms_agree': 'ನಾನು ಒಪ್ಪುತ್ತೇನೆ',
+    'auth.terms_service': 'ಸೇವಾ ನಿಯಮಗಳು',
+    'auth.privacy_policy': 'ಗೌಪ್ಯತೆ ನೀತಿ',
+    'auth.enter_email': 'ನಿಮ್ಮ ಇಮೇಲ್ ನಮೂದಿಸಿ',
+    'auth.enter_password': 'ನಿಮ್ಮ ಪಾಸ್‌ವರ್ಡ್ ನಮೂದಿಸಿ',
+    'auth.enter_name': 'ನಿಮ್ಮ ಪೂರ್ಣ ಹೆಸರು ನಮೂದಿಸಿ',
+    'auth.enter_phone': 'ನಿಮ್ಮ ಫೋನ್ ಸಂಖ್ಯೆ ನಮೂದಿಸಿ',
+    'auth.enter_location': 'ನಗರ, ರಾಜ್ಯ',
+    'auth.create_password': 'ಪಾಸ್‌ವರ್ಡ್ ರಚಿಸಿ',
+    'auth.confirm_your_password': 'ನಿಮ್ಮ ಪಾಸ್‌ವರ್ಡ್ ದೃಢೀಕರಿಸಿ',
+    'auth.fill_all_fields': 'ದಯವಿಟ್ಟು ಎಲ್ಲಾ ಕ್ಷೇತ್ರಗಳನ್ನು ಭರ್ತಿ ಮಾಡಿ',
+    'auth.fill_required_fields': 'ದಯವಿಟ್ಟು ಎಲ್ಲಾ ಅಗತ್ಯ ಕ್ಷೇತ್ರಗಳನ್ನು ಭರ್ತಿ ಮಾಡಿ',
+    'auth.passwords_no_match': 'ಪಾಸ್‌ವರ್ಡ್‌ಗಳು ಹೊಂದಾಣಿಕೆಯಾಗುವುದಿಲ್ಲ',
+    'auth.password_length': 'ಪಾಸ್‌ವರ್ಡ್ ಕನಿಷ್ಠ 6 ಅಕ್ಷರಗಳು ಇರಬೇಕು',
+    'auth.invalid_credentials': 'ಅಮಾನ್ಯ ಪ್ರಮಾಣಪತ್ರಗಳು. ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.',
+    'auth.failed_create': 'ಖಾತೆ ರಚಿಸಲು ವಿಫಲ. ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.',
+    
+    // Dashboard
+    'dashboard.welcome': 'ಮತ್ತೆ ಸ್ವಾಗತ',
+    'dashboard.gateway': 'ಇಲ್ಲಿ ಹೊಸ ಅವಕಾಶಗಳು ಮತ್ತು ಸಹಯೋಗಗಳಿಗೆ ನಿಮ್ಮ ಪ್ರವೇಶದ್ವಾರ.',
+    'dashboard.profile_strength': 'ಪ್ರೊಫೈಲ್ ಶಕ್ತಿ',
+    'dashboard.strong': 'ಬಲವಾದ',
+    'dashboard.based_on_skills': 'ನಿಮ್ಮ ಕೌಶಲ್ಯಗಳು ಮತ್ತು ಅನುಮೋದನೆಗಳ ಆಧಾರದ ಮೇಲೆ',
+    'dashboard.total_endorsements': 'ಒಟ್ಟು ಅನುಮೋದನೆಗಳು',
+    'dashboard.from_peers': 'ಸಹೋದ್ಯೋಗಿಗಳು ಮತ್ತು ನೌಕರಿದಾರರಿಂದ',
+    'dashboard.skill_hotspot': 'ಕೌಶಲ್ಯ ಹಾಟ್‌ಸ್ಪಾಟ್',
+    'dashboard.top_region': 'ನಿಮ್ಮ ಕೌಶಲ್ಯಗಳಿಗೆ ಉನ್ನತ ಪ್ರದೇಶ',
+    'dashboard.collaboration_requests': 'ಸಹಯೋಗ ವಿನಂತಿಗಳು',
+    'dashboard.new_inquiries': 'ಈ ತಿಂಗಳ ಹೊಸ ವಿಚಾರಣೆಗಳು',
+    'dashboard.recommended_opportunities': 'ಶಿಫಾರಸು ಮಾಡಿದ ಅವಕಾಶಗಳು',
+    'dashboard.ai_matches': 'ನಿಮ್ಮ ಪ್ರೊಫೈಲ್ ಆಧಾರದ ಮೇಲೆ AI-ಚಾಲಿತ ಹೊಂದಾಣಿಕೆಗಳು.',
+    'dashboard.view_all_opportunities': 'ಎಲ್ಲಾ ಅವಕಾಶಗಳನ್ನು ವೀಕ್ಷಿಸಿ',
+    'dashboard.skill_endorsements': 'ಕೌಶಲ್ಯ ಅನುಮೋದನೆಗಳು',
+    'dashboard.visual_breakdown': 'ಕೌಶಲ್ಯದ ಪ್ರಕಾರ ನಿಮ್ಮ ಅನುಮೋದನೆಗಳ ದೃಶ್ಯ ವಿಭಜನೆ.',
+    
+    // Navigation
+    'nav.dashboard': 'ಡ್ಯಾಶ್‌ಬೋರ್ಡ್',
+    'nav.opportunities': 'ಅವಕಾಶಗಳು',
+    'nav.map': 'ನಕ್ಷೆ',
+    'nav.collaboration': 'ಸಹಯೋಗ',
+    'nav.profile': 'ಪ್ರೊಫೈಲ್',
+    'nav.settings': 'ಸೆಟ್ಟಿಂಗ್‌ಗಳು',
+    'nav.employer': 'ನೌಕರಿದಾರ',
+    'nav.logout': 'ಲಾಗ್‌ಔಟ್',
+    
+    // Common
+    'common.loading': 'ಲೋಡ್ ಆಗುತ್ತಿದೆ...',
+    'common.save': 'ಉಳಿಸಿ',
+    'common.cancel': 'ರದ್ದುಗೊಳಿಸಿ',
+    'common.edit': 'ಸಂಪಾದಿಸಿ',
+    'common.delete': 'ಅಳಿಸಿ',
+    'common.view': 'ವೀಕ್ಷಿಸಿ',
+    'common.search': 'ಹುಡುಕಿ',
+    'common.filter': 'ಫಿಲ್ಟರ್',
+    'common.sort': 'ವಿಂಗಡಿಸಿ',
+    'common.apply': 'ಅನ್ವಯಿಸಿ',
+    'common.clear': 'ಸ್ಪಷ್ಟಗೊಳಿಸಿ',
+    'common.back': 'ಹಿಂದಕ್ಕೆ',
+    'common.next': 'ಮುಂದೆ',
+    'common.previous': 'ಹಿಂದಿನ',
+    'common.submit': 'ಸಲ್ಲಿಸಿ',
+    'common.close': 'ಮುಚ್ಚಿ',
+    'common.open': 'ತೆರೆಯಿರಿ',
+    'common.yes': 'ಹೌದು',
+    'common.no': 'ಇಲ್ಲ',
+    'common.ok': 'ಸರಿ',
+    'common.error': 'ದೋಷ',
+    'common.success': 'ಯಶಸ್ಸು',
+    'common.warning': 'ಎಚ್ಚರಿಕೆ',
+    'common.info': 'ಮಾಹಿತಿ',
+    // Opportunities
+    'opportunities.title': 'ನಿಮ್ಮ ಮುಂದಿನ ಅವಕಾಶವನ್ನು ಹುಡುಕಿ',
+    'opportunities.subtitle': 'ನಿಮಗಾಗಿ ಹೊಂದಿಸಲಾದ ಉದ್ಯೋಗಗಳು, ಯೋಜನೆಗಳು ಮತ್ತು ಸಹಯೋಗ ವಿನಂತಿಗಳನ್ನು ಬ್ರೌಸ್ ಮಾಡಿ.',
+    'opportunities.search_placeholder': 'ಶೀರ್ಷಿಕೆ ಅಥವಾ ಕೌಶಲ್ಯದಿಂದ ಹುಡುಕಿ...',
+    'opportunities.filter': 'ಫಿಲ್ಟರ್',
+    'opportunities.filter_by': 'ಫಿಲ್ಟರ್ ಮಾಡಿ',
+    'opportunities.full_time': 'ಪೂರ್ಣ ಸಮಯ',
+    'opportunities.part_time': 'ಅಂಶಕಾಲಿಕ',
+    'opportunities.contract': 'ಒಪ್ಪಂದ',
+    // Employer Dashboard
+    'employer.dashboard_title': 'ನೌಕರಿದಾರ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್',
+    'employer.welcome_message': '{company} ಗೆ ಸ್ವಾಗತ! ನಿಮ್ಮ ಉದ್ಯೋಗ ಪೋಸ್ಟ್‌ಗಳು ಮತ್ತು ಅರ್ಜಿದಾರರನ್ನು ನಿರ್ವಹಿಸಿ.',
+    'employer.post_new_job': 'ಹೊಸ ಉದ್ಯೋಗ ಪೋಸ್ಟ್ ಮಾಡಿ',
+    'employer.overview': 'ಅವಲೋಕನ',
+    'employer.job_posts': 'ಉದ್ಯೋಗ ಪೋಸ್ಟ್‌ಗಳು',
+    'employer.applicants': 'ಅರ್ಜಿದಾರರು',
+    'employer.analytics': 'ವಿಶ್ಲೇಷಣೆ',
+    'employer.recent_job_posts': 'ಇತ್ತೀಚಿನ ಉದ್ಯೋಗ ಪೋಸ್ಟ್‌ಗಳು',
+    'employer.recent_job_posts_desc': 'ನಿಮ್ಮ ಇತ್ತೀಚಿನ ಉದ್ಯೋಗ ಪೋಸ್ಟ್‌ಗಳು ಮತ್ತು ಅವುಗಳ ಕಾರ್ಯಕ್ಷಮತೆ',
+    // Profile
+    'profile.contact': 'ಸಂಪರ್ಕ',
+    'profile.share': 'ಹಂಚಿಕೊಳ್ಳಿ',
+    'profile.about': 'ಬಗ್ಗೆ',
+    'profile.skills': 'ಕೌಶಲ್ಯಗಳು',
+    'profile.add_skills_voice': 'ಧ್ವನಿಯೊಂದಿಗೆ ಕೌಶಲ್ಯಗಳನ್ನು ಸೇರಿಸಿ',
+    'profile.no_skills_yet': 'ಇನ್ನೂ ಯಾವುದೇ ಕೌಶಲ್ಯಗಳು ಸೇರಿಸಲಾಗಿಲ್ಲ. ನಿಮ್ಮ ಕೌಶಲ್ಯಗಳನ್ನು ಸೇರಿಸಲು ಧ್ವನಿ ಇನ್‌ಪುಟ್ ಬಳಸಿ!',
+    'profile.endorsements': 'ಬೆಂಬಲಗಳು',
+    'profile.no_endorsements_yet': 'ಇನ್ನೂ ಯಾವುದೇ ಬೆಂಬಲಗಳಿಲ್ಲ. ಬೆಂಬಲಗಳನ್ನು ಪಡೆಯಲು ನಿಮ್ಮ ನೆಟ್‌ವರ್ಕ್ ನಿರ್ಮಿಸಿ!'
   },
   bn: {
     // Header
@@ -276,32 +649,163 @@ const translations = {
     
     // Footer
     'footer.copyright': 'সকল অধিকার সংরক্ষিত।',
-    'footer.project': 'একটি গর্বিত *ইনোভিঙ্কার্স* প্রকল্প।'
+    'footer.project': 'একটি গর্বিত *ইনোভিঙ্কার্স* প্রকল্প।',
+    
+    // Auth Pages
+    'auth.welcome_back': 'ভারতের দক্ষতা-থেকে-কাজের নেটওয়ার্কে ফিরে স্বাগতম',
+    'auth.join_network': 'ভারতের দক্ষতা-থেকে-কাজের নেটওয়ার্কে যোগ দিন',
+    'auth.signin': 'সাইন ইন',
+    'auth.signup': 'অ্যাকাউন্ট তৈরি করুন',
+    'auth.access_account': 'আপনার যাত্রা চালিয়ে যেতে আপনার অ্যাকাউন্টে অ্যাক্সেস করুন',
+    'auth.start_journey': 'দক্ষতাকে সুযোগের সাথে সংযুক্ত করার আপনার যাত্রা শুরু করুন',
+    'auth.email': 'ইমেইল ঠিকানা',
+    'auth.password': 'পাসওয়ার্ড',
+    'auth.full_name': 'পূর্ণ নাম',
+    'auth.phone': 'ফোন নম্বর',
+    'auth.location': 'অবস্থান',
+    'auth.confirm_password': 'পাসওয়ার্ড নিশ্চিত করুন',
+    'auth.remember_me': 'আমাকে মনে রাখুন',
+    'auth.forgot_password': 'পাসওয়ার্ড ভুলে গেছেন?',
+    'auth.signing_in': 'সাইন ইন হচ্ছে...',
+    'auth.creating_account': 'অ্যাকাউন্ট তৈরি হচ্ছে...',
+    'auth.dont_have_account': 'অ্যাকাউন্ট নেই?',
+    'auth.create_one': 'এখনই তৈরি করুন',
+    'auth.already_have_account': 'ইতিমধ্যে অ্যাকাউন্ট আছে?',
+    'auth.sign_in_here': 'এখানে সাইন ইন করুন',
+    'auth.continue_with': 'অথবা এর সাথে চালিয়ে যান',
+    'auth.back_to_home': '← বাড়িতে ফিরুন',
+    'auth.artisan_worker': 'কারিগর/দক্ষ কর্মী',
+    'auth.employer_business': 'নিয়োগকর্তা/ব্যবসা',
+    'auth.terms_agree': 'আমি সম্মত',
+    'auth.terms_service': 'সেবার শর্তাবলী',
+    'auth.privacy_policy': 'গোপনীয়তা নীতি',
+    'auth.enter_email': 'আপনার ইমেইল লিখুন',
+    'auth.enter_password': 'আপনার পাসওয়ার্ড লিখুন',
+    'auth.enter_name': 'আপনার পূর্ণ নাম লিখুন',
+    'auth.enter_phone': 'আপনার ফোন নম্বর লিখুন',
+    'auth.enter_location': 'শহর, রাজ্য',
+    'auth.create_password': 'পাসওয়ার্ড তৈরি করুন',
+    'auth.confirm_your_password': 'আপনার পাসওয়ার্ড নিশ্চিত করুন',
+    'auth.fill_all_fields': 'অনুগ্রহ করে সব ফিল্ড পূরণ করুন',
+    'auth.fill_required_fields': 'অনুগ্রহ করে সব প্রয়োজনীয় ফিল্ড পূরণ করুন',
+    'auth.passwords_no_match': 'পাসওয়ার্ড মিলছে না',
+    'auth.password_length': 'পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে',
+    'auth.invalid_credentials': 'অবৈধ পরিচয়। অনুগ্রহ করে আবার চেষ্টা করুন।',
+    'auth.failed_create': 'অ্যাকাউন্ট তৈরি করতে ব্যর্থ। অনুগ্রহ করে আবার চেষ্টা করুন।',
+    
+    // Dashboard
+    'dashboard.welcome': 'ফিরে স্বাগতম',
+    'dashboard.gateway': 'এখানে নতুন সুযোগ এবং সহযোগিতার জন্য আপনার প্রবেশদ্বার।',
+    'dashboard.profile_strength': 'প্রোফাইল শক্তি',
+    'dashboard.strong': 'শক্তিশালী',
+    'dashboard.based_on_skills': 'আপনার দক্ষতা এবং অনুমোদনের ভিত্তিতে',
+    'dashboard.total_endorsements': 'মোট অনুমোদন',
+    'dashboard.from_peers': 'সহকর্মী এবং নিয়োগকর্তাদের কাছ থেকে',
+    'dashboard.skill_hotspot': 'দক্ষতা হটস্পট',
+    'dashboard.top_region': 'আপনার দক্ষতার জন্য শীর্ষ অঞ্চল',
+    'dashboard.collaboration_requests': 'সহযোগিতা অনুরোধ',
+    'dashboard.new_inquiries': 'এই মাসের নতুন অনুসন্ধান',
+    'dashboard.recommended_opportunities': 'প্রস্তাবিত সুযোগ',
+    'dashboard.ai_matches': 'আপনার প্রোফাইলের ভিত্তিতে AI-চালিত ম্যাচ।',
+    'dashboard.view_all_opportunities': 'সব সুযোগ দেখুন',
+    'dashboard.skill_endorsements': 'দক্ষতা অনুমোদন',
+    'dashboard.visual_breakdown': 'দক্ষতা অনুযায়ী আপনার অনুমোদনের ভিজ্যুয়াল বিভাজন।',
+    
+    // Navigation
+    'nav.dashboard': 'ড্যাশবোর্ড',
+    'nav.opportunities': 'সুযোগ',
+    'nav.map': 'মানচিত্র',
+    'nav.collaboration': 'সহযোগিতা',
+    'nav.profile': 'প্রোফাইল',
+    'nav.settings': 'সেটিংস',
+    'nav.employer': 'নিয়োগকর্তা',
+    'nav.logout': 'লগআউট',
+    
+    // Common
+    'common.loading': 'লোড হচ্ছে...',
+    'common.save': 'সংরক্ষণ',
+    'common.cancel': 'বাতিল',
+    'common.edit': 'সম্পাদনা',
+    'common.delete': 'মুছে ফেলুন',
+    'common.view': 'দেখুন',
+    'common.search': 'অনুসন্ধান',
+    'common.filter': 'ফিল্টার',
+    'common.sort': 'সাজান',
+    'common.apply': 'প্রয়োগ',
+    'common.clear': 'পরিষ্কার',
+    'common.back': 'ফিরে',
+    'common.next': 'পরবর্তী',
+    'common.previous': 'পূর্ববর্তী',
+    'common.submit': 'জমা দিন',
+    'common.close': 'বন্ধ',
+    'common.open': 'খুলুন',
+    'common.yes': 'হ্যাঁ',
+    'common.no': 'না',
+    'common.ok': 'ঠিক আছে',
+    'common.error': 'ত্রুটি',
+    'common.success': 'সফল',
+    'common.warning': 'সতর্কতা',
+    'common.info': 'তথ্য',
+    // Opportunities
+    'opportunities.title': 'আপনার পরবর্তী সুযোগ খুঁজুন',
+    'opportunities.subtitle': 'আপনার জন্য তৈরি করা চাকরি, প্রকল্প এবং সহযোগিতা অনুরোধ ব্রাউজ করুন।',
+    'opportunities.search_placeholder': 'শিরোনাম বা দক্ষতা দিয়ে অনুসন্ধান করুন...',
+    'opportunities.filter': 'ফিল্টার',
+    'opportunities.filter_by': 'ফিল্টার করুন',
+    'opportunities.full_time': 'পূর্ণকালীন',
+    'opportunities.part_time': 'খণ্ডকালীন',
+    'opportunities.contract': 'চুক্তি',
+    // Employer Dashboard
+    'employer.dashboard_title': 'নিয়োগকর্তা ড্যাশবোর্ড',
+    'employer.welcome_message': '{company} এ ফিরে স্বাগতম! আপনার চাকরির পোস্ট এবং আবেদনকারীদের পরিচালনা করুন।',
+    'employer.post_new_job': 'নতুন চাকরি পোস্ট করুন',
+    'employer.overview': 'সংক্ষিপ্ত বিবরণ',
+    'employer.job_posts': 'চাকরির পোস্ট',
+    'employer.applicants': 'আবেদনকারী',
+    'employer.analytics': 'বিশ্লেষণ',
+    'employer.recent_job_posts': 'সাম্প্রতিক চাকরির পোস্ট',
+    'employer.recent_job_posts_desc': 'আপনার সর্বশেষ চাকরি পোস্টিং এবং তাদের কর্মক্ষমতা',
+    // Profile
+    'profile.contact': 'যোগাযোগ',
+    'profile.share': 'শেয়ার করুন',
+    'profile.about': 'সম্পর্কে',
+    'profile.skills': 'দক্ষতা',
+    'profile.add_skills_voice': 'কণ্ঠ দিয়ে দক্ষতা যোগ করুন',
+    'profile.no_skills_yet': 'এখনও কোন দক্ষতা যোগ করা হয়নি। আপনার দক্ষতা যোগ করতে কণ্ঠ ইনপুট ব্যবহার করুন!',
+    'profile.endorsements': 'সহায়তা',
+    'profile.no_endorsements_yet': 'এখনও কোন সহায়তা নেই। সহায়তা পেতে আপনার নেটওয়ার্ক তৈরি করুন!'
   }
 };
 
 export function TranslationProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguage] = useState<Language>('en');
+  const [isHydrated, setIsHydrated] = useState(false);
 
   // Load language from localStorage on mount
   useEffect(() => {
-    const savedLanguage = localStorage.getItem('bharatlink-language') as Language;
-    if (savedLanguage && ['en', 'hi', 'kn', 'bn'].includes(savedLanguage)) {
-      setLanguage(savedLanguage);
+    // Only run on client side
+    if (typeof window !== 'undefined') {
+      const savedLanguage = localStorage.getItem('bharatlink-language') as Language;
+      if (savedLanguage && ['en', 'hi', 'kn', 'bn'].includes(savedLanguage)) {
+        setLanguage(savedLanguage);
+      }
+      setIsHydrated(true);
     }
   }, []);
 
   // Save language to localStorage when it changes
   useEffect(() => {
-    localStorage.setItem('bharatlink-language', language);
-  }, [language]);
+    if (typeof window !== 'undefined' && isHydrated) {
+      localStorage.setItem('bharatlink-language', language);
+    }
+  }, [language, isHydrated]);
 
   const t = (key: string): string => {
     return translations[language][key as keyof typeof translations[typeof language]] || key;
   };
 
   return (
-    <TranslationContext.Provider value={{ language, setLanguage, t }}>
+    <TranslationContext.Provider value={{ language, setLanguage, t, isHydrated }}>
       {children}
     </TranslationContext.Provider>
   );

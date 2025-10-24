@@ -9,6 +9,12 @@
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
+// Get the model from environment or use default
+const getModel = () => {
+  const hasApiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
+  return hasApiKey ? 'googleai/gemini-2.5-flash' : 'googleai/gemini-2.5-flash';
+};
+
 const SpeechToTextInputSchema = z.object({
   audio: z
     .string()
@@ -41,12 +47,19 @@ const speechToTextFlow = ai.defineFlow(
     outputSchema: SpeechToTextOutputSchema,
   },
   async ({audio, prompt}) => {
-    const {text} = await ai.generate({
-      prompt: [
-        {media: {url: audio}},
-        {text: prompt},
-      ],
-    });
-    return {text};
+    try {
+      const {text} = await ai.generate({
+        model: getModel(),
+        prompt: [
+          {media: {url: audio}},
+          {text: prompt},
+        ],
+      });
+      return {text};
+    } catch (error) {
+      console.error('Speech-to-text error:', error);
+      // Return a fallback message if AI fails
+      return {text: 'Sorry, I could not process the audio. Please try again.'};
+    }
   }
 );

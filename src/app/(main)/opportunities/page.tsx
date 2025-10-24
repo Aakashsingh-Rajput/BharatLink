@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -20,16 +22,19 @@ import OpportunityList from "@/components/opportunities/opportunity-list";
 import { ListFilter, Mic, Search } from "lucide-react";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useTranslation } from "@/contexts/translation-context";
 
 export default function OpportunitiesPage() {
+  const { t } = useTranslation();
+  
   return (
     <div className="flex flex-col gap-8">
       <div>
         <h1 className="text-3xl font-bold font-headline">
-          Find Your Next Opportunity
+          {t('opportunities.title')}
         </h1>
         <p className="text-muted-foreground">
-          Browse jobs, projects, and collaboration requests tailored for you.
+          {t('opportunities.subtitle')}
         </p>
       </div>
       <Card>
@@ -38,7 +43,7 @@ export default function OpportunitiesPage() {
             <div className="relative flex-1">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search by title or skill..."
+                placeholder={t('opportunities.search_placeholder')}
                 className="pl-8"
               />
               <Mic className="absolute right-2.5 top-2.5 h-4 w-4 text-muted-foreground hover:text-foreground cursor-pointer" />
@@ -48,17 +53,17 @@ export default function OpportunitiesPage() {
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" className="w-full sm:w-auto">
                     <ListFilter className="mr-2 h-4 w-4" />
-                    Filter
+                    {t('opportunities.filter')}
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuLabel>Filter by</DropdownMenuLabel>
+                  <DropdownMenuLabel>{t('opportunities.filter_by')}</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuCheckboxItem checked>
-                    Full-time
+                    {t('opportunities.full_time')}
                   </DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem>Part-time</DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem>Contract</DropdownMenuCheckboxItem>
+                  <DropdownMenuCheckboxItem>{t('opportunities.part_time')}</DropdownMenuCheckboxItem>
+                  <DropdownMenuCheckboxItem>{t('opportunities.contract')}</DropdownMenuCheckboxItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
