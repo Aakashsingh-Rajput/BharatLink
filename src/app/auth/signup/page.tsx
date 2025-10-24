@@ -72,7 +72,8 @@ export default function SignUpPage() {
         phone: formData.phone,
         location: formData.location,
         userType: formData.userType as 'artisan' | 'employer',
-        avatarUrl: '/placeholder-avatar.jpg'
+        avatarUrl: '/placeholder-avatar.jpg',
+        bio: ''
       };
       
       login(userData);

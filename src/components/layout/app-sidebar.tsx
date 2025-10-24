@@ -31,6 +31,7 @@ const menuItems = [
   { href: "/map", label: "Skill Map", icon: Map },
   { href: "/collaboration", label: "Collaboration Hub", icon: Handshake },
   { href: "/employer", label: "Employer Dashboard", icon: Building2 },
+  { href: "/settings", label: "Settings", icon: Settings },
 ];
 
 export function AppSidebar() {
