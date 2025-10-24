@@ -22,8 +22,11 @@ import { currentUser } from "@/lib/data";
 import { useState, useRef, useCallback } from "react";
 import { speechToText } from "@/ai/flows/speech-to-text";
 import { ChakraLoader } from "../ui/loader";
+import { useAuth } from "@/contexts/auth-context";
+import Link from "next/link";
 
 export function AppHeader() {
+  const { user, logout, isAuthenticated } = useAuth();
   const [isRecording, setIsRecording] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -99,30 +102,43 @@ export function AppHeader() {
           </div>
         </form>
       </div>
-      <Button variant="ghost" size="icon" className="rounded-full">
-        <Bell className="h-5 w-5" />
-        <span className="sr-only">Toggle notifications</span>
-      </Button>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
+      {isAuthenticated ? (
+        <>
           <Button variant="ghost" size="icon" className="rounded-full">
-            <Avatar className="h-8 w-8">
-              <AvatarImage src={currentUser.avatarUrl} alt={currentUser.name} />
-              <AvatarFallback>{currentUser.name.charAt(0)}</AvatarFallback>
-            </Avatar>
+            <Bell className="h-5 w-5" />
+            <span className="sr-only">Toggle notifications</span>
           </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <Settings className="mr-2 h-4 w-4" />
-            <span>Settings</span>
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>Logout</DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="rounded-full">
+                <Avatar className="h-8 w-8">
+                  <AvatarImage src={user?.avatarUrl || '/placeholder-avatar.jpg'} alt={user?.name || 'User'} />
+                  <AvatarFallback>{user?.name?.charAt(0) || 'U'}</AvatarFallback>
+                </Avatar>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <Settings className="mr-2 h-4 w-4" />
+                <span>Settings</span>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={logout}>Logout</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </>
+      ) : (
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" asChild>
+            <Link href="/auth/signin">Sign In</Link>
+          </Button>
+          <Button asChild>
+            <Link href="/auth/signup">Sign Up</Link>
+          </Button>
+        </div>
+      )}
     </header>
   );
 }

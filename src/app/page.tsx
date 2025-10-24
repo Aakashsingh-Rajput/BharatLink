@@ -88,8 +88,11 @@ export default function LandingPage() {
           <Link href="#about" className="text-sm font-medium hover:text-primary transition-colors">
             About
           </Link>
+          <Button variant="ghost" asChild>
+            <Link href="/auth/signin">Sign In</Link>
+          </Button>
           <Button asChild>
-            <Link href="/dashboard">Launch App <ArrowRight className="ml-2 h-4 w-4" /></Link>
+            <Link href="/auth/signup">Sign Up</Link>
           </Button>
         </nav>
       </header>
