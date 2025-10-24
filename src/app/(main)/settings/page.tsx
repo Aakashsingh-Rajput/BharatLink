@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -40,7 +40,7 @@ export default function SettingsPage() {
     email: user?.email || '',
     phone: user?.phone || '',
     location: user?.location || '',
-    bio: '',
+    bio: user?.bio || '',
     userType: user?.userType || 'artisan'
   });
 
@@ -78,6 +78,20 @@ export default function SettingsPage() {
   // UI State
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('profile');
+
+  // Sync profile data when user changes
+  useEffect(() => {
+    if (user) {
+      setProfileData({
+        name: user.name || '',
+        email: user.email || '',
+        phone: user.phone || '',
+        location: user.location || '',
+        bio: user.bio || '',
+        userType: user.userType || 'artisan'
+      });
+    }
+  }, [user]);
 
   const handleProfileUpdate = async () => {
     setIsLoading(true);

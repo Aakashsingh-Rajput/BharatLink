@@ -42,7 +42,8 @@ export default function SignInPage() {
         email,
         name: email.split('@')[0],
         userType: 'artisan' as const,
-        avatarUrl: '/placeholder-avatar.jpg'
+        avatarUrl: '/placeholder-avatar.jpg',
+        bio: ''
       };
       
       login(userData);
