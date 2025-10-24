@@ -51,7 +51,7 @@ import {
   Search,
   Info,
   Star,
-  Location,
+  LocateIcon,
 } from "lucide-react";
 import skillsData from "@/data/skills.json";
 
@@ -430,7 +430,7 @@ export function EnhancedSkillMap() {
                       <div className="flex flex-wrap gap-2 mt-3">
                         {skill.regions.map((region, index) => (
                           <Badge key={index} variant="outline" className="gap-1">
-                            <Location className="h-3 w-3" />
+                            <LocateIcon className="h-3 w-3" />
                             {region.state}: {region.cities.join(", ")}
                           </Badge>
                         ))}

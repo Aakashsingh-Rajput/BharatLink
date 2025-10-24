@@ -32,7 +32,71 @@ const RelevantOpportunitiesOutputSchema = z.object({
 export type RelevantOpportunitiesOutput = z.infer<typeof RelevantOpportunitiesOutputSchema>;
 
 export async function suggestRelevantOpportunities(input: RelevantOpportunitiesInput): Promise<RelevantOpportunitiesOutput> {
-  return suggestRelevantOpportunitiesFlow(input);
+  // Check if AI is available
+  const hasApiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
+  
+  if (!hasApiKey) {
+    // Return mock data when AI is not available
+    return getMockOpportunities(input);
+  }
+  
+  try {
+    return await suggestRelevantOpportunitiesFlow(input);
+  } catch (error) {
+    console.warn('AI service unavailable, falling back to mock data:', error);
+    return getMockOpportunities(input);
+  }
+}
+
+function getMockOpportunities(input: RelevantOpportunitiesInput): RelevantOpportunitiesOutput {
+  const mockOpportunities = [
+    {
+      title: "Traditional Handicraft Designer",
+      description: "Create innovative designs for traditional Indian handicrafts, combining modern aesthetics with traditional techniques. Work with local artisans to develop new product lines.",
+      location: input.location || "Remote",
+      skillsRequired: input.skills.slice(0, 3),
+      trustScore: 85,
+    },
+    {
+      title: "Artisan Collaboration Coordinator",
+      description: "Bridge the gap between urban businesses and rural artisans. Help coordinate projects, manage quality control, and facilitate communication between stakeholders.",
+      location: input.location || "Hybrid",
+      skillsRequired: ["Project Management", "Communication", "Quality Control"],
+      trustScore: 78,
+    },
+    {
+      title: "Cultural Heritage Consultant",
+      description: "Advise organizations on preserving and promoting traditional crafts. Develop strategies for cultural preservation and economic sustainability.",
+      location: input.location || "On-site",
+      skillsRequired: input.skills.slice(0, 2).concat(["Cultural Studies", "Research"]),
+      trustScore: 92,
+    },
+    {
+      title: "E-commerce Specialist for Handicrafts",
+      description: "Help artisans and craft businesses establish and grow their online presence. Manage digital marketing, product photography, and online sales.",
+      location: "Remote",
+      skillsRequired: ["Digital Marketing", "E-commerce", "Photography"],
+      trustScore: 80,
+    },
+    {
+      title: "Sustainable Craft Workshop Instructor",
+      description: "Teach traditional crafting techniques to urban audiences. Conduct workshops on pottery, weaving, and other traditional skills.",
+      location: input.location || "Various Locations",
+      skillsRequired: input.skills.slice(0, 2).concat(["Teaching", "Public Speaking"]),
+      trustScore: 88,
+    }
+  ];
+
+  return {
+    opportunities: mockOpportunities.filter(opp => 
+      opp.skillsRequired.some(skill => 
+        input.skills.some(inputSkill => 
+          inputSkill.toLowerCase().includes(skill.toLowerCase()) || 
+          skill.toLowerCase().includes(inputSkill.toLowerCase())
+        )
+      )
+    ).slice(0, 4) // Return top 4 matches
+  };
 }
 
 const prompt = ai.definePrompt({
@@ -62,7 +126,18 @@ const suggestRelevantOpportunitiesFlow = ai.defineFlow(
     outputSchema: RelevantOpportunitiesOutputSchema,
   },
   async input => {
-    const {output} = await prompt(input);
-    return output!;
+    const hasApiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
+    
+    if (!hasApiKey) {
+      return getMockOpportunities(input);
+    }
+    
+    try {
+      const {output} = await prompt(input);
+      return output!;
+    } catch (error) {
+      console.warn('AI prompt failed, falling back to mock data:', error);
+      return getMockOpportunities(input);
+    }
   }
 );
