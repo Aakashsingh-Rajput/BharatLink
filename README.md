@@ -1,64 +1,71 @@
-# BharatLink - Rural Skill-to-Work Network
+# BharatLink: Rural Skill-to-Work Network
 
-Connecting India's Grassroots Talent to Digital Opportunities.
+### Built by **Team Innovinkers**  
+**Members:**  
+-  Aakashsingh Rajput (Team Lead – Backend & Integration)  
+-  Jigisha Singh (Frontend & UI/UX)  
+-  Shachi Pradhan (Voice Interface & Data Handling)
 
-## Features
+---
 
-- **Skill Cluster Mapping**: Interactive map showing regional skill concentrations
-- **Employer Dashboard**: Tools for businesses to find and hire skilled artisans
-- **AI-Powered Matching**: Smart recommendations for opportunities and talent
-- **Voice-First Access**: Multilingual support for rural users
-- **Trust Verification**: Peer endorsements and skill assessments
+## Project Overview
 
-## Getting Started
+**BharatLink** is a digital ecosystem designed to **bridge the gap between rural skills and urban opportunities**.  
+It empowers rural artisans, craftsmen, and workers by connecting them directly with industries, startups, and individuals in urban areas — transforming traditional skills into sustainable income sources.  
 
-### Prerequisites
+Our platform enables:
+- Local **skill discovery** and **digital onboarding** in regional languages.  
+- **AI-based skill-to-work matchmaking** using a structured recommendation model.  
+- A **voice-enabled interface** for users with limited literacy.  
+- **Trust score** and community validation system.  
+- Promotion of regional identities — like **Karnataka’s handloom**, **Rajasthan’s crafts**, and **Bihar’s Madhubani art** — to preserve culture while creating livelihood.
 
-- Node.js 18+ 
-- npm or yarn
+---
 
-### Installation
+##  Problem Statement
 
-1. Clone the repository
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+Millions of rural workers in India possess unique, high-value skills — but lack visibility, access to digital job markets, or means to showcase their expertise.  
+Existing job platforms focus on urban users, leaving rural artisans digitally excluded.  
 
-3. Start the development server:
-   ```bash
-   npm run dev
-   ```
+**BharatLink** aims to solve this by creating a **Rural Skill Network** that:
+1. Digitizes skill data via voice or text input.  
+2. Uses AI to categorize and match skills to suitable opportunities.  
+3. Connects employers with verified rural talent directly.  
 
-4. Open [http://localhost:9002](http://localhost:9002) in your browser
+---
 
-### AI Features (Optional)
+##  Core Features
 
-To enable AI-powered features like smart opportunity matching:
+| Feature | Description |
+|:---------|:-------------|
+| **Dual User Login** | Separate flows for rural users (mobile-based) and employers (email-based). |
+| **Voice-Based Registration** | Voice-to-text onboarding for low-literacy users in local languages. |
+| **AI-Powered Skill Matching** | Intelligent mapping of rural skills to urban jobs/projects. |
+| **Regional Craft Focus** | Promotes state-specific crafts like Channapatna Toys, Blue Pottery, Madhubani Art, etc. |
+| **Trust Score System** | Peer validation & endorsements to build credibility. |
+| **Offline Access** | SMS/IVR updates for areas with poor internet. |
+| **Blockchain-based certification** for verified artisans. |
 
-1. Get a Google AI API key from [Google AI Studio](https://aistudio.google.com/app/apikey)
-2. Create a `.env.local` file in the root directory:
-   ```env
-   GEMINI_API_KEY=your_api_key_here
-   ```
+---
+## Future Enhancements
+- Integration with **Skill India**, **NSDC**, and **Digital India** APIs.  
+- **Regional product marketplace** for direct sales.  
+- **Community-driven mentorship** for upskilling rural talent.  
 
-**Note**: The application works without AI features - it will use mock data for demonstration purposes.
+---
 
-## Tech Stack
+##  Impact
 
-- **Frontend**: Next.js 15, React, TypeScript
-- **Styling**: Tailwind CSS, shadcn/ui
-- **AI**: Google Genkit, Gemini AI
-- **Charts**: Recharts
-- **Icons**: Lucide React
+- **Empowers rural India** with access to the digital economy.  
+- **Preserves traditional craftsmanship** while boosting livelihood.  
+- **Fosters inclusivity** — bridging rural-urban digital divide.  
+- **Aligns with SDG Goals**: Decent Work (8), Reduced Inequality (10), and Sustainable Communities (11).  
 
-## Project Structure
+---
 
-```
-src/
-├── app/                 # Next.js app router pages
-├── components/          # Reusable UI components
-├── ai/                  # AI flows and configurations
-├── data/               # Mock data and configurations
-└── lib/                # Utility functions
-```
+##  Team Vision
+
+> “We envision a digitally empowered Bharat where every skilled hand — rural or urban — finds its rightful opportunity.”  
+> — *Team Innovinkers*
+
+---
