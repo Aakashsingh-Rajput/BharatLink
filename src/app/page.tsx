@@ -1,63 +1,67 @@
+"use client";
+
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, MapPin, Mic, Users, Zap, Briefcase, Handshake, Building2, Search, Star, TrendingUp, Globe, Target } from 'lucide-react';
 import { FarmingIcon, PotteryIcon, WeavingIcon } from '@/components/icons';
+import { useTranslation } from '@/contexts/translation-context';
+import { LanguageSelector } from '@/components/layout/language-selector';
 
-const features = [
+const getFeatures = (t: (key: string) => string) => [
   {
     icon: <MapPin className="h-8 w-8 text-accent" />,
-    title: 'Skill Cluster Mapping',
-    description: 'Discover regional skill hotspots, from Channapatna toys to Assam handloom.',
+    title: t('features.skill_mapping.title'),
+    description: t('features.skill_mapping.desc'),
   },
   {
     icon: <Mic className="h-8 w-8 text-accent" />,
-    title: 'Voice-First Access',
-    description: 'Register and manage your profile using your local language with simple voice commands.',
+    title: t('features.voice.title'),
+    description: t('features.voice.desc'),
   },
   {
     icon: <Users className="h-8 w-8 text-accent" />,
-    title: 'AI + Trust Verification',
-    description: 'Build your credibility with peer endorsements, turning word-of-mouth into digital trust.',
+    title: t('features.trust.title'),
+    description: t('features.trust.desc'),
   },
   {
     icon: <Zap className="h-8 w-8 text-accent" />,
-    title: 'Smart Matchmaking',
-    description: 'Get connected to verified jobs and projects that match your skills, location, and trust score.',
+    title: t('features.matchmaking.title'),
+    description: t('features.matchmaking.desc'),
   },
   {
     icon: <Handshake className="h-8 w-8 text-accent" />,
-    title: 'Collaboration Hub',
-    description: 'A space for urban businesses to connect with and hire authentic rural talent directly.',
+    title: t('features.collaboration.title'),
+    description: t('features.collaboration.desc'),
   },
   {
     icon: <Briefcase className="h-8 w-8 text-accent" />,
-    title: 'Verified Opportunities',
-    description: 'Access a curated list of jobs from verified companies, reducing fraud and uncertainty.',
+    title: t('features.opportunities.title'),
+    description: t('features.opportunities.desc'),
   },
 ];
 
-const employerFeatures = [
+const getEmployerFeatures = (t: (key: string) => string) => [
   {
     icon: <Search className="h-8 w-8 text-accent" />,
-    title: 'Smart Talent Discovery',
-    description: 'Find verified artisans and skilled workers using AI-powered search across skill clusters and regions.',
+    title: t('employers.discovery.title'),
+    description: t('employers.discovery.desc'),
   },
   {
     icon: <Building2 className="h-8 w-8 text-accent" />,
-    title: 'Direct Hiring Platform',
-    description: 'Post jobs, review applications, and hire talent directly without intermediaries or high fees.',
+    title: t('employers.hiring.title'),
+    description: t('employers.hiring.desc'),
   },
   {
     icon: <Star className="h-8 w-8 text-accent" />,
-    title: 'Verified Quality',
-    description: 'Access pre-verified talent with peer endorsements and skill assessments for guaranteed quality.',
+    title: t('employers.quality.title'),
+    description: t('employers.quality.desc'),
   },
   {
     icon: <TrendingUp className="h-8 w-8 text-accent" />,
-    title: 'Scalable Solutions',
-    description: 'From single projects to large-scale operations, scale your workforce needs efficiently.',
+    title: t('employers.scale.title'),
+    description: t('employers.scale.desc'),
   },
 ];
 
@@ -71,6 +75,10 @@ const skillClusters = [
 ];
 
 export default function LandingPage() {
+  const { t } = useTranslation();
+  const features = getFeatures(t);
+  const employerFeatures = getEmployerFeatures(t);
+
   return (
     <div className="flex flex-col min-h-screen">
       <header className="container mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
@@ -80,19 +88,20 @@ export default function LandingPage() {
         </div>
         <nav className="flex items-center gap-4">
           <Link href="#features" className="text-sm font-medium hover:text-primary transition-colors">
-            Features
+            {t('nav.features')}
           </Link>
           <Link href="#employers" className="text-sm font-medium hover:text-primary transition-colors">
-            Employers
+            {t('nav.employers')}
           </Link>
           <Link href="#about" className="text-sm font-medium hover:text-primary transition-colors">
-            About
+            {t('nav.about')}
           </Link>
+          <LanguageSelector />
           <Button variant="ghost" asChild>
-            <Link href="/auth/signin">Sign In</Link>
+            <Link href="/auth/signin">{t('nav.signin')}</Link>
           </Button>
           <Button asChild>
-            <Link href="/auth/signup">Sign Up</Link>
+            <Link href="/auth/signup">{t('nav.signup')}</Link>
           </Button>
         </nav>
       </header>
@@ -104,20 +113,20 @@ export default function LandingPage() {
             </div>
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
             <div className="inline-block bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-semibold mb-4">
-                For a Self-Reliant India (Atmanirbhar Bharat)
+                {t('hero.badge')}
             </div>
             <h2 className="text-4xl md:text-6xl font-headline font-bold tracking-tight">
-              Connecting India’s Grassroots Talent to Digital Opportunities.
+              {t('hero.title')}
             </h2>
             <p className="mt-6 max-w-3xl mx-auto text-lg text-muted-foreground">
-              BharatLink is a digital bridge designed to connect rural skills to urban opportunities, creating a sustainable skill-to-work ecosystem for India.
+              {t('hero.description')}
             </p>
             <div className="mt-8 flex justify-center gap-4">
               <Button size="lg" asChild>
-                <Link href="/dashboard">Explore Opportunities <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                <Link href="/dashboard">{t('hero.explore')} <ArrowRight className="ml-2 h-4 w-4" /></Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <Link href="#features">Learn More</Link>
+                <Link href="#features">{t('hero.learn')}</Link>
               </Button>
             </div>
           </div>
@@ -136,7 +145,7 @@ export default function LandingPage() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                     <div className="absolute bottom-0 left-0 p-8">
-                        <h3 className="text-white text-3xl font-headline font-bold">From the heart of Bharat to the edge of innovation.</h3>
+                        <h3 className="text-white text-3xl font-headline font-bold">{t('hero.subtitle')}</h3>
                     </div>
                 </div>
             </div>
@@ -145,9 +154,9 @@ export default function LandingPage() {
         <section id="features" className="py-24 md:py-32">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
-              <h2 className="text-3xl font-headline font-bold">A Platform for a Digital India</h2>
+              <h2 className="text-3xl font-headline font-bold">{t('features.title')}</h2>
               <p className="mt-4 max-w-2xl mx-auto text-muted-foreground">
-                Empowering every skilled individual with the tools they need to thrive in the digital economy.
+                {t('features.subtitle')}
               </p>
             </div>
             <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
@@ -169,9 +178,9 @@ export default function LandingPage() {
         <section id="employers" className="bg-gradient-to-br from-primary/5 to-accent/5 py-24 md:py-32">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-3xl font-headline font-bold">For Employers & Businesses</h2>
+              <h2 className="text-3xl font-headline font-bold">{t('employers.title')}</h2>
               <p className="mt-4 max-w-2xl mx-auto text-muted-foreground">
-                Connect with India's most skilled artisans and workers. Find the right talent for your projects, from traditional crafts to modern skills.
+                {t('employers.subtitle')}
               </p>
             </div>
             
@@ -192,10 +201,10 @@ export default function LandingPage() {
             <div className="text-center">
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button size="lg" asChild>
-                  <Link href="/employer">Post a Job <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                  <Link href="/employer">{t('employers.post_job')} <ArrowRight className="ml-2 h-4 w-4" /></Link>
                 </Button>
                 <Button size="lg" variant="outline" asChild>
-                  <Link href="/map">Explore Talent Map <Globe className="ml-2 h-4 w-4" /></Link>
+                  <Link href="/map">{t('employers.explore_map')} <Globe className="ml-2 h-4 w-4" /></Link>
                 </Button>
               </div>
             </div>
@@ -205,9 +214,9 @@ export default function LandingPage() {
         <section id="skill-clusters" className="py-24 md:py-32">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-3xl font-headline font-bold">Skill Cluster Mapping</h2>
+              <h2 className="text-3xl font-headline font-bold">{t('clusters.title')}</h2>
               <p className="mt-4 max-w-2xl mx-auto text-muted-foreground">
-                Discover regional skill hotspots across India. Each cluster represents a concentration of traditional skills and modern capabilities.
+                {t('clusters.subtitle')}
               </p>
             </div>
             
@@ -224,13 +233,13 @@ export default function LandingPage() {
                     </div>
                     <div className="flex items-center gap-2 text-sm text-accent">
                       <Users className="h-4 w-4" />
-                      {cluster.artisans.toLocaleString()} artisans
+                      {cluster.artisans.toLocaleString()} {t('clusters.artisans')}
                     </div>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-3">
                       <div>
-                        <h4 className="font-semibold text-sm mb-2">Key Skills:</h4>
+                        <h4 className="font-semibold text-sm mb-2">{t('clusters.skills')}</h4>
                         <div className="flex flex-wrap gap-1">
                           {cluster.skills.map((skill) => (
                             <span key={skill} className="px-2 py-1 bg-primary/10 text-primary text-xs rounded-full">
@@ -241,7 +250,7 @@ export default function LandingPage() {
                       </div>
                       <Button size="sm" variant="outline" className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
                         <Target className="mr-2 h-3 w-3" />
-                        View Details
+                        {t('clusters.view_details')}
                       </Button>
                     </div>
                   </CardContent>
@@ -251,7 +260,7 @@ export default function LandingPage() {
 
             <div className="text-center mt-12">
               <Button size="lg" asChild>
-                <Link href="/map">Explore Full Skill Map <MapPin className="ml-2 h-4 w-4" /></Link>
+                <Link href="/map">{t('clusters.explore')} <MapPin className="ml-2 h-4 w-4" /></Link>
               </Button>
             </div>
           </div>
@@ -260,27 +269,26 @@ export default function LandingPage() {
         <section id="about" className="bg-secondary/50 py-24 md:py-32">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-12 items-center">
                 <div>
-                    <h2 className="text-3xl font-headline font-bold">Empowering the Unseen Workforce</h2>
+                    <h2 className="text-3xl font-headline font-bold">{t('about.title')}</h2>
                     <p className="mt-4 text-muted-foreground">
-                        Millions of skilled artisans, craftsmen, and workers in rural India have the talent but lack the digital visibility to connect with opportunities. 
-                        BharatLink solves this by providing an accessible, voice-first platform that makes their skills discoverable.
+                        {t('about.desc1')}
                     </p>
                     <p className="mt-4 text-muted-foreground">
-                        We're not just a job portal; we're a movement to build a verified, trusted, and inclusive economic network that honors and uplifts India's traditional skills.
+                        {t('about.desc2')}
                     </p>
                 </div>
                 <div className="grid grid-cols-3 gap-4">
                     <div className="flex flex-col items-center p-4 bg-card rounded-lg shadow-md">
                         <PotteryIcon className="h-12 w-12 text-accent"/>
-                        <span className="mt-2 font-semibold">Pottery</span>
+                        <span className="mt-2 font-semibold">{t('about.pottery')}</span>
                     </div>
                     <div className="flex flex-col items-center p-4 bg-card rounded-lg shadow-md">
                         <WeavingIcon className="h-12 w-12 text-accent"/>
-                        <span className="mt-2 font-semibold">Weaving</span>
+                        <span className="mt-2 font-semibold">{t('about.weaving')}</span>
                     </div>
                     <div className="flex flex-col items-center p-4 bg-card rounded-lg shadow-md">
                         <FarmingIcon className="h-12 w-12 text-accent"/>
-                        <span className="mt-2 font-semibold">Agriculture</span>
+                        <span className="mt-2 font-semibold">{t('about.agriculture')}</span>
                     </div>
                 </div>
             </div>
@@ -290,8 +298,8 @@ export default function LandingPage() {
 
       <footer className="bg-background border-t">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 flex justify-between items-center">
-          <p className="text-sm text-muted-foreground">&copy; {new Date().getFullYear()} BharatLink. All rights reserved.</p>
-          <p className="text-sm text-muted-foreground font-headline">A proud *Innovinkers* project.</p>
+          <p className="text-sm text-muted-foreground">&copy; {new Date().getFullYear()} BharatLink. {t('footer.copyright')}</p>
+          <p className="text-sm text-muted-foreground font-headline">{t('footer.project')}</p>
         </div>
       </footer>
     </div>

@@ -4,24 +4,41 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { currentUser as initialUser } from "@/lib/data";
 import { Edit, Mail, MapPin, Quote, Share2, Mic } from "lucide-react";
 import EndorsementSummary from "@/components/profile/endorsement-summary";
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { speechToText } from "@/ai/flows/speech-to-text";
 import { ChakraLoader } from "@/components/ui/loader";
 import { useToast } from "@/hooks/use-toast";
 import { Textarea } from "@/components/ui/textarea";
+import { useAuth } from "@/contexts/auth-context";
+import { UserInfoSync } from "@/components/profile/user-info-sync";
 
 export default function ProfilePage() {
-  const [currentUser, setCurrentUser] = useState(initialUser);
+  const { user, login } = useAuth();
+  const [currentUser, setCurrentUser] = useState(user || {
+    name: 'User',
+    email: '',
+    location: '',
+    bio: '',
+    avatarUrl: '/placeholder-avatar.jpg',
+    userType: 'artisan' as const
+  });
   const [isRecording, setIsRecording] = useState<string | null>(null);
   const [isEditingBio, setIsEditingBio] = useState(false);
-  const [bioText, setBioText] = useState(currentUser.bio);
+  const [bioText, setBioText] = useState(currentUser.bio || '');
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
   const { toast } = useToast();
+
+  // Sync with auth context when user data changes
+  useEffect(() => {
+    if (user) {
+      setCurrentUser(user);
+      setBioText(user.bio || '');
+    }
+  }, [user]);
 
   const handleMicClick = async (field: 'bio' | 'skills') => {
     if (isRecording) {
@@ -93,7 +110,9 @@ export default function ProfilePage() {
   };
 
   const handleSaveBio = () => {
-    setCurrentUser(prev => ({...prev, bio: bioText}));
+    const updatedUser = {...currentUser, bio: bioText};
+    setCurrentUser(updatedUser);
+    login(updatedUser); // Update auth context
     setIsEditingBio(false);
     toast({
       title: "Bio Updated",
@@ -183,6 +202,9 @@ export default function ProfilePage() {
             ))}
           </CardContent>
         </Card>
+
+        {/* Data Sync Demonstration */}
+        <UserInfoSync />
       </div>
     </div>
   );
