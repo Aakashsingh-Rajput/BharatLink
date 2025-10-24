@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import {
   suggestRelevantOpportunities,
   type RelevantOpportunitiesOutput,
 } from "@/ai/flows/suggest-relevant-opportunities";
-import { currentUser } from "@/lib/data";
+import { currentUser, Opportunity } from "@/lib/data";
 import OpportunityCard from "./opportunity-card";
 import { Skeleton } from "../ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
@@ -15,68 +15,46 @@ import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 type OpportunityListProps = {
   searchQuery?: string;
   filters?: string[];
+  opportunities?: Opportunity[];
 };
 
-export default function OpportunityList({ searchQuery = "", filters = [] }: OpportunityListProps) {
-  const [allOpportunities, setAllOpportunities] =
-    useState<RelevantOpportunitiesOutput["opportunities"] | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+export default function OpportunityList({ 
+  searchQuery = "", 
+  filters = [], 
+  opportunities: providedOpportunities 
+}: OpportunityListProps) {
+  const [aiOpportunities, setAiOpportunities] = useState<RelevantOpportunitiesOutput["opportunities"] | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Filter opportunities based on search query and filters
-  const filteredOpportunities = useMemo(() => {
-    if (!allOpportunities) return null;
-
-    let filtered = allOpportunities;
-
-    // Apply search filter
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(opportunity =>
-        opportunity.title.toLowerCase().includes(query) ||
-        opportunity.description.toLowerCase().includes(query) ||
-        opportunity.skillsRequired.some(skill => 
-          skill.toLowerCase().includes(query)
-        ) ||
-        opportunity.company.toLowerCase().includes(query) ||
-        opportunity.location.toLowerCase().includes(query)
-      );
-    }
-
-    // Apply type filters
-    if (filters.length > 0) {
-      filtered = filtered.filter(opportunity => {
-        // This is a simplified filter - in a real app, you'd have job type data
-        return true; // For now, we'll show all opportunities
-      });
-    }
-
-    return filtered;
-  }, [allOpportunities, searchQuery, filters]);
+  // Use provided opportunities or fetch from AI
+  const allOpportunities = providedOpportunities || aiOpportunities;
 
   useEffect(() => {
-    async function fetchOpportunities() {
-      setIsLoading(true);
-      setError(null);
-      try {
-        const result = await suggestRelevantOpportunities({
-          skills: currentUser.skills,
-          location: currentUser.location,
-          endorsements: currentUser.endorsements.length,
-          jobTypes: ["full-time", "contract", "part-time"],
-          industry: "Handicrafts",
-        });
-        setAllOpportunities(result.opportunities);
-      } catch (e) {
-        setError("Failed to load opportunities. Please try again later.");
-        console.error(e);
-      } finally {
-        setIsLoading(false);
+    if (!providedOpportunities) {
+      async function fetchOpportunities() {
+        setIsLoading(true);
+        setError(null);
+        try {
+          const result = await suggestRelevantOpportunities({
+            skills: currentUser.skills,
+            location: currentUser.location,
+            endorsements: currentUser.endorsements.length,
+            jobTypes: ["full-time", "contract", "part-time"],
+            industry: "Handicrafts",
+          });
+          setAiOpportunities(result.opportunities);
+        } catch (e) {
+          setError("Failed to load opportunities. Please try again later.");
+          console.error(e);
+        } finally {
+          setIsLoading(false);
+        }
       }
-    }
 
-    fetchOpportunities();
-  }, []);
+      fetchOpportunities();
+    }
+  }, [providedOpportunities]);
 
   if (isLoading) {
     return <OpportunityListSkeleton />;
@@ -92,7 +70,7 @@ export default function OpportunityList({ searchQuery = "", filters = [] }: Oppo
     );
   }
 
-  if (!filteredOpportunities || filteredOpportunities.length === 0) {
+  if (!allOpportunities || allOpportunities.length === 0) {
     return (
       <div className="text-center py-10 border border-dashed rounded-lg">
         <h3 className="text-xl font-semibold font-headline">
@@ -117,11 +95,11 @@ export default function OpportunityList({ searchQuery = "", filters = [] }: Oppo
     <div className="space-y-4">
       {searchQuery && (
         <div className="text-sm text-muted-foreground mb-4">
-          Showing {filteredOpportunities.length} result{filteredOpportunities.length !== 1 ? 's' : ''} for "{searchQuery}"
+          Showing {allOpportunities.length} result{allOpportunities.length !== 1 ? 's' : ''} for "{searchQuery}"
         </div>
       )}
-      {filteredOpportunities.map((opp, index) => (
-        <OpportunityCard key={index} opportunity={opp} />
+      {allOpportunities.map((opp, index) => (
+        <OpportunityCard key={opp.id || index} opportunity={opp} />
       ))}
     </div>
   );

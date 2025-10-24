@@ -1,31 +1,35 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import OpportunityList from "@/components/opportunities/opportunity-list";
-import { ListFilter, Mic, Search } from "lucide-react";
-import { Suspense, useState } from "react";
+import { EnhancedSearch } from "@/components/ui/enhanced-search";
+import { useSearch } from "@/hooks/use-search";
+import { opportunities } from "@/lib/data";
+import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function OpportunitiesPage() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+  const {
+    searchQuery,
+    setSearchQuery,
+    filters,
+    setFilters,
+    filteredItems,
+    searchStats,
+    availableSkills,
+    availableLocations,
+    availableTypes,
+    availableStatuses,
+    sortBy,
+    setSortBy,
+    sortOrder,
+    setSortOrder,
+    clearFilters,
+  } = useSearch({
+    items: opportunities,
+    initialSortBy: 'trustScore',
+    initialSortOrder: 'desc'
+  });
 
   return (
     <div className="flex flex-col gap-8">
@@ -37,77 +41,45 @@ export default function OpportunitiesPage() {
           Browse jobs, projects, and collaboration requests tailored for you.
         </p>
       </div>
+      
       <Card>
         <CardHeader>
-          <div className="flex flex-col md:flex-row gap-4 justify-between">
-            <div className="relative flex-1">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search by title or skill..."
-                className="pl-8"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-              <Mic className="absolute right-2.5 top-2.5 h-4 w-4 text-muted-foreground hover:text-foreground cursor-pointer" />
-            </div>
-            <div className="flex gap-2">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="w-full sm:w-auto">
-                    <ListFilter className="mr-2 h-4 w-4" />
-                    Filter
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuLabel>Filter by</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuCheckboxItem 
-                    checked={selectedFilters.includes('full-time')}
-                    onCheckedChange={(checked) => {
-                      if (checked) {
-                        setSelectedFilters([...selectedFilters, 'full-time']);
-                      } else {
-                        setSelectedFilters(selectedFilters.filter(f => f !== 'full-time'));
-                      }
-                    }}
-                  >
-                    Full-time
-                  </DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem 
-                    checked={selectedFilters.includes('part-time')}
-                    onCheckedChange={(checked) => {
-                      if (checked) {
-                        setSelectedFilters([...selectedFilters, 'part-time']);
-                      } else {
-                        setSelectedFilters(selectedFilters.filter(f => f !== 'part-time'));
-                      }
-                    }}
-                  >
-                    Part-time
-                  </DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem 
-                    checked={selectedFilters.includes('contract')}
-                    onCheckedChange={(checked) => {
-                      if (checked) {
-                        setSelectedFilters([...selectedFilters, 'contract']);
-                      } else {
-                        setSelectedFilters(selectedFilters.filter(f => f !== 'contract'));
-                      }
-                    }}
-                  >
-                    Contract
-                  </DropdownMenuCheckboxItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </div>
+          <CardTitle>Search Opportunities</CardTitle>
+          <CardDescription>
+            Find the perfect opportunity that matches your skills and interests
+          </CardDescription>
         </CardHeader>
         <CardContent>
-          <Suspense fallback={<OpportunityListSkeleton />}>
-            <OpportunityList searchQuery={searchQuery} filters={selectedFilters} />
-          </Suspense>
+          <EnhancedSearch
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+            filters={filters}
+            onFiltersChange={setFilters}
+            availableSkills={availableSkills}
+            availableLocations={availableLocations}
+            availableTypes={availableTypes}
+            availableStatuses={availableStatuses}
+            sortBy={sortBy}
+            onSortChange={setSortBy}
+            sortOrder={sortOrder}
+            onSortOrderChange={setSortOrder}
+            searchStats={searchStats}
+            onClearFilters={clearFilters}
+            placeholder="Search by title, skill, company, or location..."
+            showAdvancedFilters={true}
+            showSortOptions={true}
+            showStats={true}
+          />
         </CardContent>
       </Card>
+
+      <Suspense fallback={<OpportunityListSkeleton />}>
+        <OpportunityList 
+          searchQuery={searchQuery} 
+          filters={filters.type || []} 
+          opportunities={filteredItems}
+        />
+      </Suspense>
     </div>
   );
 }

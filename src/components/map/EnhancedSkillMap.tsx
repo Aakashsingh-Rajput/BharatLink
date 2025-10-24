@@ -54,6 +54,7 @@ import {
   LocateIcon,
 } from "lucide-react";
 import skillsData from "@/data/skills.json";
+import { InteractiveSkillMap } from "./InteractiveSkillMap";
 
 interface SkillLocation {
   id: string;
@@ -198,72 +199,11 @@ export function EnhancedSkillMap() {
       {viewMode === "map" && (
         <div className="grid gap-6 lg:grid-cols-3">
           <div className="lg:col-span-2">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <MapPin className="h-5 w-5" />
-                  Interactive Skill Map
-                </CardTitle>
-                <CardDescription>
-                  Click on skill clusters to explore detailed information
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="relative h-[500px] bg-gradient-to-br from-blue-50 to-green-50 rounded-lg border-2 border-dashed border-muted-foreground/25 flex items-center justify-center">
-                  <div className="text-center space-y-4">
-                    <MapPin className="h-16 w-16 text-muted-foreground mx-auto" />
-                    <div>
-                      <h3 className="text-lg font-semibold">Interactive Map Coming Soon</h3>
-                      <p className="text-muted-foreground">
-                        This will integrate with a mapping service like Mapbox or Google Maps
-                      </p>
-                      <p className="text-sm text-muted-foreground mt-2">
-                        Features: Precise location markers, clustering, heat maps, and detailed artisan information
-                      </p>
-                    </div>
-                  </div>
-                  
-                  {/* Skill clusters overlay */}
-                  {filteredSkills.map((skill, index) => (
-                    <div
-                      key={skill.id}
-                      className="absolute cursor-pointer group"
-                      style={{
-                        top: `${20 + (index * 15) % 60}%`,
-                        left: `${15 + (index * 25) % 70}%`,
-                      }}
-                      onMouseEnter={() => setHoveredSkill(skill)}
-                      onMouseLeave={() => setHoveredSkill(null)}
-                    >
-                      <div className="relative">
-                        <div className={`w-8 h-8 rounded-full border-2 border-white shadow-lg flex items-center justify-center text-white font-bold text-sm ${
-                          skill.demand === 'high' ? 'bg-red-500' : 
-                          skill.demand === 'medium' ? 'bg-yellow-500' : 'bg-green-500'
-                        }`}>
-                          {skill.artisanCount > 1000 ? 'H' : skill.artisanCount > 500 ? 'M' : 'L'}
-                        </div>
-                        {hoveredSkill?.id === skill.id && (
-                          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-64 p-3 bg-white rounded-lg shadow-lg border z-10">
-                            <h4 className="font-semibold text-sm">{skill.name}</h4>
-                            <p className="text-xs text-muted-foreground mt-1">{skill.description}</p>
-                            <div className="flex items-center gap-4 mt-2 text-xs">
-                              <span className="flex items-center gap-1">
-                                <Users className="h-3 w-3" />
-                                {skill.artisanCount} artisans
-                              </span>
-                              <span className="flex items-center gap-1">
-                                <TrendingUp className="h-3 w-3" />
-                                <RupeeAmount amount={skill.averageSalary} />
-                              </span>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+            <InteractiveSkillMap
+              selectedCategory={selectedCategory}
+              searchTerm={searchTerm}
+              onSkillSelect={(skill) => setHoveredSkill(skill)}
+            />
           </div>
 
           <div className="space-y-4">

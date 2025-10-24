@@ -1,32 +1,33 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
-import { Mic, Search } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import ArtisanCard from "@/components/collaboration/artisan-card";
-import { artisans, Artisan } from "@/lib/data";
-import { useState, useMemo } from "react";
+import { EnhancedSearch } from "@/components/ui/enhanced-search";
+import { useSearch } from "@/hooks/use-search";
+import { artisans } from "@/lib/data";
 
 export default function CollaborationPage() {
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const filteredArtisans = useMemo(() => {
-    if (!searchQuery.trim()) {
-      return artisans;
-    }
-
-    const query = searchQuery.toLowerCase().trim();
-    return artisans.filter((artisan) => 
-      artisan.craft.toLowerCase().includes(query) ||
-      artisan.name.toLowerCase().includes(query) ||
-      artisan.location.toLowerCase().includes(query)
-    ).sort((a, b) => {
-      // Sort by rating (highest first) and then by review count
-      if (b.rating !== a.rating) {
-        return b.rating - a.rating;
-      }
-      return b.reviewCount - a.reviewCount;
-    });
-  }, [searchQuery]);
+  const {
+    searchQuery,
+    setSearchQuery,
+    filters,
+    setFilters,
+    filteredItems: filteredArtisans,
+    searchStats,
+    availableSkills,
+    availableLocations,
+    availableTypes,
+    availableStatuses,
+    sortBy,
+    setSortBy,
+    sortOrder,
+    setSortOrder,
+    clearFilters,
+  } = useSearch({
+    items: artisans,
+    initialSortBy: 'rating',
+    initialSortOrder: 'desc'
+  });
 
   return (
     <div className="flex flex-col gap-8">
@@ -40,16 +41,36 @@ export default function CollaborationPage() {
         </p>
       </div>
 
-      <div className="relative">
-        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-        <Input
-          placeholder="Search for artisans by skill (e.g., 'Pottery', 'Weaving')..."
-          className="pl-8"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-        <Mic className="absolute right-2.5 top-2.5 h-4 w-4 text-muted-foreground hover:text-foreground cursor-pointer" />
-      </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>Find Artisans</CardTitle>
+          <CardDescription>
+            Discover skilled artisans and craftspeople for your projects
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <EnhancedSearch
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+            filters={filters}
+            onFiltersChange={setFilters}
+            availableSkills={availableSkills}
+            availableLocations={availableLocations}
+            availableTypes={availableTypes}
+            availableStatuses={availableStatuses}
+            sortBy={sortBy}
+            onSortChange={setSortBy}
+            sortOrder={sortOrder}
+            onSortOrderChange={setSortOrder}
+            searchStats={searchStats}
+            onClearFilters={clearFilters}
+            placeholder="Search for artisans by skill, name, or location..."
+            showAdvancedFilters={true}
+            showSortOptions={true}
+            showStats={true}
+          />
+        </CardContent>
+      </Card>
 
       <div>
         <h2 className="text-2xl font-bold font-headline mb-4">
