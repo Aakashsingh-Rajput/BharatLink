@@ -104,3 +104,15 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Ensure rupee symbol displays correctly */
+.rupee-symbol {
+  font-family: 'Noto Sans', 'Arial Unicode MS', sans-serif;
+  font-weight: bold;
+}
+
+/* Fallback for rupee symbol display */
+.rupee-symbol::before {
+  content: '₹';
+  font-family: 'Noto Sans', 'Arial Unicode MS', sans-serif;
+}
