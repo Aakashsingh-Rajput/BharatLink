@@ -11,9 +11,12 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/auth-context';
+import { useTranslation } from '@/contexts/translation-context';
+import { LanguageSelector } from '@/components/layout/language-selector';
 
 export default function SignUpPage() {
   const { login } = useAuth();
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -44,19 +47,19 @@ export default function SignUpPage() {
 
     // Validation
     if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
-      setError('Please fill in all required fields');
+      setError(t('auth.fill_required_fields'));
       setIsLoading(false);
       return;
     }
 
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
+      setError(t('auth.passwords_no_match'));
       setIsLoading(false);
       return;
     }
 
     if (formData.password.length < 6) {
-      setError('Password must be at least 6 characters long');
+      setError(t('auth.password_length'));
       setIsLoading(false);
       return;
     }
@@ -73,13 +76,15 @@ export default function SignUpPage() {
         location: formData.location,
         userType: formData.userType as 'artisan' | 'employer',
         avatarUrl: '/placeholder-avatar.jpg',
-        bio: ''
+        bio: '',
+        skills: [],
+        endorsements: []
       };
       
       login(userData);
       router.push('/dashboard');
     } catch (err) {
-      setError('Failed to create account. Please try again.');
+      setError(t('auth.failed_create'));
     } finally {
       setIsLoading(false);
     }
@@ -94,14 +99,17 @@ export default function SignUpPage() {
             <Image src="/logo.svg" alt="BharatLink Logo" width={40} height={40} />
             <h1 className="text-3xl font-headline font-bold text-foreground">BharatLink</h1>
           </div>
-          <p className="text-muted-foreground">Join India's skill-to-work network</p>
+          <p className="text-muted-foreground">{t('auth.join_network')}</p>
+          <div className="flex justify-center mt-4">
+            <LanguageSelector />
+          </div>
         </div>
 
         <Card className="bg-card/70 backdrop-blur-sm border-border/50 shadow-lg">
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl font-headline">Create Account</CardTitle>
+            <CardTitle className="text-2xl font-headline">{t('auth.signup')}</CardTitle>
             <p className="text-sm text-muted-foreground mt-2">
-              Start your journey to connect skills with opportunities
+              {t('auth.start_journey')}
             </p>
           </CardHeader>
           <CardContent>
@@ -114,7 +122,7 @@ export default function SignUpPage() {
 
               {/* User Type Selection */}
               <div className="space-y-2">
-                <Label className="text-sm font-medium">I am a</Label>
+                <Label className="text-sm font-medium">{t('auth.artisan_worker')}</Label>
                 <div className="grid grid-cols-2 gap-2">
                   <Button
                     type="button"
@@ -122,7 +130,7 @@ export default function SignUpPage() {
                     className="w-full"
                     onClick={() => setFormData(prev => ({ ...prev, userType: 'artisan' }))}
                   >
-                    Artisan/Skilled Worker
+                    {t('auth.artisan_worker')}
                   </Button>
                   <Button
                     type="button"
@@ -130,14 +138,14 @@ export default function SignUpPage() {
                     className="w-full"
                     onClick={() => setFormData(prev => ({ ...prev, userType: 'employer' }))}
                   >
-                    Employer/Business
+                    {t('auth.employer_business')}
                   </Button>
                 </div>
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="name" className="text-sm font-medium">
-                  Full Name *
+                  {t('auth.full_name')} *
                 </Label>
                 <div className="relative">
                   <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -145,7 +153,7 @@ export default function SignUpPage() {
                     id="name"
                     name="name"
                     type="text"
-                    placeholder="Enter your full name"
+                    placeholder={t('auth.enter_name')}
                     className="pl-10"
                     value={formData.name}
                     onChange={handleInputChange}
@@ -156,7 +164,7 @@ export default function SignUpPage() {
 
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-sm font-medium">
-                  Email Address *
+                  {t('auth.email')} *
                 </Label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -164,18 +172,19 @@ export default function SignUpPage() {
                     id="email"
                     name="email"
                     type="email"
-                    placeholder="Enter your email"
+                    placeholder={t('auth.enter_email')}
                     className="pl-10"
                     value={formData.email}
                     onChange={handleInputChange}
                     required
+                    suppressHydrationWarning
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="phone" className="text-sm font-medium">
-                  Phone Number
+                  {t('auth.phone')}
                 </Label>
                 <div className="relative">
                   <Phone className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -183,7 +192,7 @@ export default function SignUpPage() {
                     id="phone"
                     name="phone"
                     type="tel"
-                    placeholder="Enter your phone number"
+                    placeholder={t('auth.enter_phone')}
                     className="pl-10"
                     value={formData.phone}
                     onChange={handleInputChange}
@@ -193,7 +202,7 @@ export default function SignUpPage() {
 
               <div className="space-y-2">
                 <Label htmlFor="location" className="text-sm font-medium">
-                  Location
+                  {t('auth.location')}
                 </Label>
                 <div className="relative">
                   <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -201,7 +210,7 @@ export default function SignUpPage() {
                     id="location"
                     name="location"
                     type="text"
-                    placeholder="City, State"
+                    placeholder={t('auth.enter_location')}
                     className="pl-10"
                     value={formData.location}
                     onChange={handleInputChange}
@@ -211,7 +220,7 @@ export default function SignUpPage() {
 
               <div className="space-y-2">
                 <Label htmlFor="password" className="text-sm font-medium">
-                  Password *
+                  {t('auth.password')} *
                 </Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -219,11 +228,12 @@ export default function SignUpPage() {
                     id="password"
                     name="password"
                     type={showPassword ? "text" : "password"}
-                    placeholder="Create a password"
+                    placeholder={t('auth.create_password')}
                     className="pl-10 pr-10"
                     value={formData.password}
                     onChange={handleInputChange}
                     required
+                    suppressHydrationWarning
                   />
                   <Button
                     type="button"
@@ -243,7 +253,7 @@ export default function SignUpPage() {
 
               <div className="space-y-2">
                 <Label htmlFor="confirmPassword" className="text-sm font-medium">
-                  Confirm Password *
+                  {t('auth.confirm_password')} *
                 </Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -251,7 +261,7 @@ export default function SignUpPage() {
                     id="confirmPassword"
                     name="confirmPassword"
                     type={showConfirmPassword ? "text" : "password"}
-                    placeholder="Confirm your password"
+                    placeholder={t('auth.confirm_your_password')}
                     className="pl-10 pr-10"
                     value={formData.confirmPassword}
                     onChange={handleInputChange}
@@ -281,13 +291,13 @@ export default function SignUpPage() {
                   required
                 />
                 <Label htmlFor="terms" className="text-sm text-muted-foreground">
-                  I agree to the{' '}
+                  {t('auth.terms_agree')}{' '}
                   <Link href="#" className="text-primary hover:text-primary/80">
-                    Terms of Service
+                    {t('auth.terms_service')}
                   </Link>{' '}
                   and{' '}
                   <Link href="#" className="text-primary hover:text-primary/80">
-                    Privacy Policy
+                    {t('auth.privacy_policy')}
                   </Link>
                 </Label>
               </div>
@@ -296,15 +306,16 @@ export default function SignUpPage() {
                 type="submit"
                 className="w-full"
                 disabled={isLoading}
+                suppressHydrationWarning
               >
                 {isLoading ? (
                   <div className="flex items-center gap-2">
                     <div className="h-4 w-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
-                    Creating account...
+                    {t('auth.creating_account')}
                   </div>
                 ) : (
                   <div className="flex items-center gap-2">
-                    Create Account
+                    {t('auth.signup')}
                     <ArrowRight className="h-4 w-4" />
                   </div>
                 )}
@@ -313,12 +324,12 @@ export default function SignUpPage() {
 
             <div className="mt-6 text-center">
               <p className="text-sm text-muted-foreground">
-                Already have an account?{' '}
+                {t('auth.already_have_account')}{' '}
                 <Link
                   href="/auth/signin"
                   className="text-primary hover:text-primary/80 font-medium transition-colors"
                 >
-                  Sign in here
+                  {t('auth.sign_in_here')}
                 </Link>
               </p>
             </div>
@@ -329,12 +340,12 @@ export default function SignUpPage() {
                   <div className="w-full border-t border-border" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
+                  <span className="bg-card px-2 text-muted-foreground">{t('auth.continue_with')}</span>
                 </div>
               </div>
 
               <div className="mt-6 grid grid-cols-2 gap-3">
-                <Button variant="outline" className="w-full">
+                <Button variant="outline" className="w-full" suppressHydrationWarning>
                   <svg className="h-4 w-4 mr-2" viewBox="0 0 24 24">
                     <path
                       fill="currentColor"
@@ -355,7 +366,7 @@ export default function SignUpPage() {
                   </svg>
                   Google
                 </Button>
-                <Button variant="outline" className="w-full">
+                <Button variant="outline" className="w-full" suppressHydrationWarning>
                   <svg className="h-4 w-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
                   </svg>
@@ -371,7 +382,7 @@ export default function SignUpPage() {
             href="/"
             className="text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
-            ← Back to home
+            {t('auth.back_to_home')}
           </Link>
         </div>
       </div>

@@ -10,6 +10,8 @@ interface User {
   bio?: string;
   userType: 'artisan' | 'employer';
   avatarUrl: string;
+  skills?: string[];
+  endorsements?: string[];
 }
 
 interface AuthContextType {

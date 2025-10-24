@@ -11,9 +11,12 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/auth-context';
+import { useTranslation } from '@/contexts/translation-context';
+import { LanguageSelector } from '@/components/layout/language-selector';
 
 export default function SignInPage() {
   const { login } = useAuth();
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -28,7 +31,7 @@ export default function SignInPage() {
 
     // Simple validation
     if (!email || !password) {
-      setError('Please fill in all fields');
+      setError(t('auth.fill_all_fields'));
       setIsLoading(false);
       return;
     }
@@ -43,13 +46,15 @@ export default function SignInPage() {
         name: email.split('@')[0],
         userType: 'artisan' as const,
         avatarUrl: '/placeholder-avatar.jpg',
-        bio: ''
+        bio: '',
+        skills: [],
+        endorsements: []
       };
       
       login(userData);
       router.push('/dashboard');
     } catch (err) {
-      setError('Invalid credentials. Please try again.');
+      setError(t('auth.invalid_credentials'));
     } finally {
       setIsLoading(false);
     }
@@ -64,14 +69,17 @@ export default function SignInPage() {
             <Image src="/logo.svg" alt="BharatLink Logo" width={40} height={40} />
             <h1 className="text-3xl font-headline font-bold text-foreground">BharatLink</h1>
           </div>
-          <p className="text-muted-foreground">Welcome back to India's skill-to-work network</p>
+          <p className="text-muted-foreground">{t('auth.welcome_back')}</p>
+          <div className="flex justify-center mt-4">
+            <LanguageSelector />
+          </div>
         </div>
 
         <Card className="bg-card/70 backdrop-blur-sm border-border/50 shadow-lg">
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl font-headline">Sign In</CardTitle>
+            <CardTitle className="text-2xl font-headline">{t('auth.signin')}</CardTitle>
             <p className="text-sm text-muted-foreground mt-2">
-              Access your account to continue your journey
+              {t('auth.access_account')}
             </p>
           </CardHeader>
           <CardContent>
@@ -84,36 +92,38 @@ export default function SignInPage() {
 
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-sm font-medium">
-                  Email Address
+                  {t('auth.email')}
                 </Label>
                 <div className="relative">
                   <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="email"
                     type="email"
-                    placeholder="Enter your email"
+                    placeholder={t('auth.enter_email')}
                     className="pl-10"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
+                    suppressHydrationWarning
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="password" className="text-sm font-medium">
-                  Password
+                  {t('auth.password')}
                 </Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
-                    placeholder="Enter your password"
+                    placeholder={t('auth.enter_password')}
                     className="pl-10 pr-10"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
+                    suppressHydrationWarning
                   />
                   <Button
                     type="button"
@@ -139,14 +149,14 @@ export default function SignInPage() {
                     className="rounded border-border"
                   />
                   <Label htmlFor="remember" className="text-sm text-muted-foreground">
-                    Remember me
+                    {t('auth.remember_me')}
                   </Label>
                 </div>
                 <Link
                   href="#"
                   className="text-sm text-primary hover:text-primary/80 transition-colors"
                 >
-                  Forgot password?
+                  {t('auth.forgot_password')}
                 </Link>
               </div>
 
@@ -154,15 +164,16 @@ export default function SignInPage() {
                 type="submit"
                 className="w-full"
                 disabled={isLoading}
+                suppressHydrationWarning
               >
                 {isLoading ? (
                   <div className="flex items-center gap-2">
                     <div className="h-4 w-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
-                    Signing in...
+                    {t('auth.signing_in')}
                   </div>
                 ) : (
                   <div className="flex items-center gap-2">
-                    Sign In
+                    {t('auth.signin')}
                     <ArrowRight className="h-4 w-4" />
                   </div>
                 )}
@@ -171,12 +182,12 @@ export default function SignInPage() {
 
             <div className="mt-6 text-center">
               <p className="text-sm text-muted-foreground">
-                Don't have an account?{' '}
+                {t('auth.dont_have_account')}{' '}
                 <Link
                   href="/auth/signup"
                   className="text-primary hover:text-primary/80 font-medium transition-colors"
                 >
-                  Create one now
+                  {t('auth.create_one')}
                 </Link>
               </p>
             </div>
@@ -187,12 +198,12 @@ export default function SignInPage() {
                   <div className="w-full border-t border-border" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
+                  <span className="bg-card px-2 text-muted-foreground">{t('auth.continue_with')}</span>
                 </div>
               </div>
 
               <div className="mt-6 grid grid-cols-2 gap-3">
-                <Button variant="outline" className="w-full">
+                <Button variant="outline" className="w-full" suppressHydrationWarning>
                   <svg className="h-4 w-4 mr-2" viewBox="0 0 24 24">
                     <path
                       fill="currentColor"
@@ -213,7 +224,7 @@ export default function SignInPage() {
                   </svg>
                   Google
                 </Button>
-                <Button variant="outline" className="w-full">
+                <Button variant="outline" className="w-full" suppressHydrationWarning>
                   <svg className="h-4 w-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
                   </svg>
@@ -229,7 +240,7 @@ export default function SignInPage() {
             href="/"
             className="text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
-            ← Back to home
+            {t('auth.back_to_home')}
           </Link>
         </div>
       </div>

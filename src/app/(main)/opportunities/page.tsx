@@ -7,8 +7,10 @@ import { useSearch } from "@/hooks/use-search";
 import { opportunities } from "@/lib/data";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useTranslation } from "@/contexts/translation-context";
 
 export default function OpportunitiesPage() {
+  const { t } = useTranslation();
   const {
     searchQuery,
     setSearchQuery,
@@ -30,23 +32,22 @@ export default function OpportunitiesPage() {
     initialSortBy: 'trustScore',
     initialSortOrder: 'desc'
   });
-
   return (
     <div className="flex flex-col gap-8">
       <div>
         <h1 className="text-3xl font-bold font-headline">
-          Find Your Next Opportunity
+          {t('opportunities.title')}
         </h1>
         <p className="text-muted-foreground">
-          Browse jobs, projects, and collaboration requests tailored for you.
+          {t('opportunities.subtitle')}
         </p>
       </div>
       
       <Card>
         <CardHeader>
-          <CardTitle>Search Opportunities</CardTitle>
+          <CardTitle>{t('opportunities.title')}</CardTitle>
           <CardDescription>
-            Find the perfect opportunity that matches your skills and interests
+            {t('opportunities.subtitle')}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -65,7 +66,7 @@ export default function OpportunitiesPage() {
             onSortOrderChange={setSortOrder}
             searchStats={searchStats}
             onClearFilters={clearFilters}
-            placeholder="Search by title, skill, company, or location..."
+            placeholder={t('opportunities.search_placeholder')}
             showAdvancedFilters={true}
             showSortOptions={true}
             showStats={true}
