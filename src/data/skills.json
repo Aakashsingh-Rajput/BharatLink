@@ -136,18 +136,72 @@
           "artisanCount": 420
         }
       ]
+    },
+    {
+      "id": "jewelry",
+      "name": "Jewelry & Metalwork",
+      "description": "Traditional jewelry making and metalworking arts",
+      "icon": "💎",
+      "skills": [
+        {
+          "id": "kundan-jewelry",
+          "name": "Kundan Jewelry",
+          "description": "Traditional Indian jewelry making with precious stones and gold foil",
+          "regions": [
+            { "state": "Rajasthan", "cities": ["Jaipur", "Jodhpur"], "coordinates": { "lat": 26.9124, "lng": 75.7873 } },
+            { "state": "Delhi", "cities": ["New Delhi", "Old Delhi"], "coordinates": { "lat": 28.6139, "lng": 77.2090 } }
+          ],
+          "demand": "high",
+          "averageSalary": "₹35,000 - ₹70,000",
+          "artisanCount": 680
+        },
+        {
+          "id": "filigree-work",
+          "name": "Filigree Work",
+          "description": "Delicate metalwork creating intricate patterns with fine wires",
+          "regions": [
+            { "state": "Odisha", "cities": ["Cuttack", "Bhubaneswar"], "coordinates": { "lat": 20.2961, "lng": 85.8245 } },
+            { "state": "West Bengal", "cities": ["Kolkata"], "coordinates": { "lat": 22.9868, "lng": 87.8550 } }
+          ],
+          "demand": "medium",
+          "averageSalary": "₹25,000 - ₹50,000",
+          "artisanCount": 420
+        }
+      ]
+    },
+    {
+      "id": "bamboo",
+      "name": "Bamboo & Cane Work",
+      "description": "Traditional bamboo and cane craftwork",
+      "icon": "🎋",
+      "skills": [
+        {
+          "id": "bamboo-craft",
+          "name": "Bamboo Craft",
+          "description": "Traditional bamboo weaving and furniture making",
+          "regions": [
+            { "state": "Assam", "cities": ["Guwahati", "Jorhat"], "coordinates": { "lat": 26.1445, "lng": 91.7362 } },
+            { "state": "Tripura", "cities": ["Agartala"], "coordinates": { "lat": 23.8315, "lng": 91.2862 } }
+          ],
+          "demand": "medium",
+          "averageSalary": "₹18,000 - ₹35,000",
+          "artisanCount": 890
+        }
+      ]
     }
   ],
   "statistics": {
-    "totalArtisans": 8960,
-    "totalSkills": 11,
-    "averageSalary": "₹22,500",
+    "totalArtisans": 12450,
+    "totalSkills": 15,
+    "averageSalary": "₹28,500",
     "topRegions": [
-      { "state": "Rajasthan", "artisanCount": 2450, "percentage": 27.3 },
-      { "state": "Gujarat", "artisanCount": 1890, "percentage": 21.1 },
-      { "state": "Tamil Nadu", "artisanCount": 1420, "percentage": 15.8 },
-      { "state": "Uttar Pradesh", "artisanCount": 1180, "percentage": 13.2 },
-      { "state": "Karnataka", "artisanCount": 1070, "percentage": 11.9 }
+      { "state": "Rajasthan", "artisanCount": 3450, "percentage": 27.7 },
+      { "state": "Gujarat", "artisanCount": 2890, "percentage": 23.2 },
+      { "state": "Tamil Nadu", "artisanCount": 1920, "percentage": 15.4 },
+      { "state": "Uttar Pradesh", "artisanCount": 1680, "percentage": 13.5 },
+      { "state": "Karnataka", "artisanCount": 1470, "percentage": 11.8 },
+      { "state": "West Bengal", "artisanCount": 890, "percentage": 7.1 },
+      { "state": "Odisha", "artisanCount": 650, "percentage": 5.2 }
     ]
   }
 }

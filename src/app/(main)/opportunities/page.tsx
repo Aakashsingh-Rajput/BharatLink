@@ -1,32 +1,37 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import OpportunityList from "@/components/opportunities/opportunity-list";
-import { ListFilter, Mic, Search } from "lucide-react";
+import { EnhancedSearch } from "@/components/ui/enhanced-search";
+import { useSearch } from "@/hooks/use-search";
+import { opportunities } from "@/lib/data";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useTranslation } from "@/contexts/translation-context";
 
 export default function OpportunitiesPage() {
   const { t } = useTranslation();
-  
+  const {
+    searchQuery,
+    setSearchQuery,
+    filters,
+    setFilters,
+    filteredItems,
+    searchStats,
+    availableSkills,
+    availableLocations,
+    availableTypes,
+    availableStatuses,
+    sortBy,
+    setSortBy,
+    sortOrder,
+    setSortOrder,
+    clearFilters,
+  } = useSearch({
+    items: opportunities,
+    initialSortBy: 'trustScore',
+    initialSortOrder: 'desc'
+  });
   return (
     <div className="flex flex-col gap-8">
       <div>
@@ -37,44 +42,45 @@ export default function OpportunitiesPage() {
           {t('opportunities.subtitle')}
         </p>
       </div>
+      
       <Card>
         <CardHeader>
-          <div className="flex flex-col md:flex-row gap-4 justify-between">
-            <div className="relative flex-1">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder={t('opportunities.search_placeholder')}
-                className="pl-8"
-              />
-              <Mic className="absolute right-2.5 top-2.5 h-4 w-4 text-muted-foreground hover:text-foreground cursor-pointer" />
-            </div>
-            <div className="flex gap-2">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="w-full sm:w-auto">
-                    <ListFilter className="mr-2 h-4 w-4" />
-                    {t('opportunities.filter')}
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuLabel>{t('opportunities.filter_by')}</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuCheckboxItem checked>
-                    {t('opportunities.full_time')}
-                  </DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem>{t('opportunities.part_time')}</DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem>{t('opportunities.contract')}</DropdownMenuCheckboxItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </div>
+          <CardTitle>{t('opportunities.title')}</CardTitle>
+          <CardDescription>
+            {t('opportunities.subtitle')}
+          </CardDescription>
         </CardHeader>
         <CardContent>
-          <Suspense fallback={<OpportunityListSkeleton />}>
-            <OpportunityList />
-          </Suspense>
+          <EnhancedSearch
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+            filters={filters}
+            onFiltersChange={setFilters}
+            availableSkills={availableSkills}
+            availableLocations={availableLocations}
+            availableTypes={availableTypes}
+            availableStatuses={availableStatuses}
+            sortBy={sortBy}
+            onSortChange={setSortBy}
+            sortOrder={sortOrder}
+            onSortOrderChange={setSortOrder}
+            searchStats={searchStats}
+            onClearFilters={clearFilters}
+            placeholder={t('opportunities.search_placeholder')}
+            showAdvancedFilters={true}
+            showSortOptions={true}
+            showStats={true}
+          />
         </CardContent>
       </Card>
+
+      <Suspense fallback={<OpportunityListSkeleton />}>
+        <OpportunityList 
+          searchQuery={searchQuery} 
+          filters={filters.type || []} 
+          opportunities={filteredItems}
+        />
+      </Suspense>
     </div>
   );
 }

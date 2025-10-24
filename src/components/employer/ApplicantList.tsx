@@ -18,7 +18,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
+import { EnhancedSearch } from "@/components/ui/enhanced-search";
+import { useSearch } from "@/hooks/use-search";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,8 +35,6 @@ import {
   Mail,
   ExternalLink,
   MoreHorizontal,
-  Filter,
-  Search,
 } from "lucide-react";
 
 interface Applicant {
@@ -80,29 +79,27 @@ const statusColors = {
 };
 
 export function ApplicantList({ applicants, onStatusChange, onViewProfile }: ApplicantListProps) {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [sortBy, setSortBy] = useState("appliedDate");
-
-  const filteredApplicants = applicants
-    .filter(applicant => {
-      const matchesSearch = applicant.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           applicant.skills.some(skill => skill.toLowerCase().includes(searchTerm.toLowerCase()));
-      const matchesStatus = statusFilter === "all" || applicant.status === statusFilter;
-      return matchesSearch && matchesStatus;
-    })
-    .sort((a, b) => {
-      switch (sortBy) {
-        case "rating":
-          return b.rating - a.rating;
-        case "endorsements":
-          return b.endorsements - a.endorsements;
-        case "appliedDate":
-          return new Date(b.appliedDate).getTime() - new Date(a.appliedDate).getTime();
-        default:
-          return 0;
-      }
-    });
+  const {
+    searchQuery,
+    setSearchQuery,
+    filters,
+    setFilters,
+    filteredItems: filteredApplicants,
+    searchStats,
+    availableSkills,
+    availableLocations,
+    availableTypes,
+    availableStatuses,
+    sortBy,
+    setSortBy,
+    sortOrder,
+    setSortOrder,
+    clearFilters,
+  } = useSearch({
+    items: applicants,
+    initialSortBy: 'appliedDate',
+    initialSortOrder: 'desc'
+  });
 
   return (
     <Card>
@@ -116,44 +113,27 @@ export function ApplicantList({ applicants, onStatusChange, onViewProfile }: App
           </div>
         </div>
         
-        <div className="flex flex-col sm:flex-row gap-4 pt-4">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search by name or skills..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
-            />
-          </div>
-          
-          <div className="flex gap-2">
-            <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-[180px]">
-                <Filter className="h-4 w-4 mr-2" />
-                <SelectValue placeholder="Filter by status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                {statusOptions.map((status) => (
-                  <SelectItem key={status} value={status}>
-                    {status}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            
-            <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="w-[140px]">
-                <SelectValue placeholder="Sort by" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="appliedDate">Date Applied</SelectItem>
-                <SelectItem value="rating">Rating</SelectItem>
-                <SelectItem value="endorsements">Endorsements</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+        <div className="pt-4">
+          <EnhancedSearch
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+            filters={filters}
+            onFiltersChange={setFilters}
+            availableSkills={availableSkills}
+            availableLocations={availableLocations}
+            availableTypes={availableTypes}
+            availableStatuses={availableStatuses}
+            sortBy={sortBy}
+            onSortChange={setSortBy}
+            sortOrder={sortOrder}
+            onSortOrderChange={setSortOrder}
+            searchStats={searchStats}
+            onClearFilters={clearFilters}
+            placeholder="Search by name, skills, or location..."
+            showAdvancedFilters={true}
+            showSortOptions={true}
+            showStats={true}
+          />
         </div>
       </CardHeader>
       
