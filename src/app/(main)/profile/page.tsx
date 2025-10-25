@@ -4,7 +4,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Edit, Mail, MapPin, Quote, Share2, Mic, Award, Plus, X, Star, TrendingUp, Phone, MessageCircle, Copy, Check, Upload, FileText } from "lucide-react";
+import { Label } from "@/components/ui/label";
+import { Edit, Mail, MapPin, Quote, Share2, Mic, Award, Plus, X, Star, TrendingUp, Phone, MessageCircle, Copy, Check, Upload, FileText, Camera, User, Palette } from "lucide-react";
 import EndorsementSummary from "@/components/profile/endorsement-summary";
 import { MicroCertificateCard } from "@/components/profile/micro-certificate-card";
 import { CertificateModal } from "@/components/profile/certificate-modal";
@@ -42,10 +43,48 @@ export default function ProfilePage() {
   const [copiedLink, setCopiedLink] = useState(false);
   const [showContactOptions, setShowContactOptions] = useState(false);
   const [isUploadingCertificate, setIsUploadingCertificate] = useState(false);
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
+  const [showAvatarOptions, setShowAvatarOptions] = useState(false);
+  const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
+  const avatarOptionsRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+
+  // Themed avatars for BharatLink
+  const themedAvatars = [
+    {
+      id: 'artisan-1',
+      name: 'Traditional Weaver',
+      image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjRkY2QjAwIi8+CjxjaXJjbGUgY3g9IjUwIiBjeT0iNDAiIHI9IjE1IiBmaWxsPSIjRkZEMDAwIi8+CjxwYXRoIGQ9Ik0yMCA2MEw0MCA0MEw2MCA2MEw4MCA0MEwxMDAgNjBMMTAwIDgwSDIwVjYwWiIgZmlsbD0iI0ZGRkZGRiIvPgo8cGF0aCBkPSJNMzAgNzBINzBWODBIMzBWNzBaIiBmaWxsPSIjRkZEMDAwIi8+Cjwvc3ZnPgo=',
+      description: 'Traditional handloom weaver'
+    },
+    {
+      id: 'artisan-2', 
+      name: 'Pottery Master',
+      image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjRkY2QjAwIi8+CjxjaXJjbGUgY3g9IjUwIiBjeT0iNDAiIHI9IjE1IiBmaWxsPSIjRkZEMDAwIi8+CjxlbGxpcHNlIGN4PSI1MCIgY3k9IjY1IiByeD0iMjAiIHJ5PSIzMCIgZmlsbD0iI0ZGRkZGRiIvPgo8Y2lyY2xlIGN4PSI1MCIgY3k9IjY1IiByPSIxNSIgZmlsbD0iI0ZGRDAwMCIvPgo8L3N2Zz4K',
+      description: 'Ceramic pottery specialist'
+    },
+    {
+      id: 'artisan-3',
+      name: 'Textile Designer', 
+      image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjRkY2QjAwIi8+CjxjaXJjbGUgY3g9IjUwIiBjeT0iNDAiIHI9IjE1IiBmaWxsPSIjRkZEMDAwIi8+CjxyZWN0IHg9IjIwIiB5PSI1NSIgd2lkdGg9IjYwIiBoZWlnaHQ9IjMwIiBmaWxsPSIjRkZGRkZGIi8+CjxwYXRoIGQ9Ik0yNSA2MEwzNSA1MEw0NSA2MEw1NSA1MEw2NSA2MEw3NSA1MEw4NSA2MEw4NSA3MEwyNSA3MFY2MFoiIGZpbGw9IiNGRkQwMDAiLz4KPC9zdmc+Cg==',
+      description: 'Block printing expert'
+    },
+    {
+      id: 'artisan-4',
+      name: 'Jewelry Craftsman',
+      image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjRkY2QjAwIi8+CjxjaXJjbGUgY3g9IjUwIiBjeT0iNDAiIHI9IjE1IiBmaWxsPSIjRkZEMDAwIi8+CjxjaXJjbGUgY3g9IjQwIiBjeT0iNjUiIHI9IjgiIGZpbGw9IiNGRkZGRkYiLz4KPGNpcmNsZSBjeD0iNjAiIGN5PSI2NSIgcj0iOCIgZmlsbD0iI0ZGRkZGRiIvPgo8Y2lyY2xlIGN4PSI1MCIgY3k9Ijc1IiByPSI2IiBmaWxsPSIjRkZEMDAwIi8+Cjwvc3ZnPgo=',
+      description: 'Traditional jewelry maker'
+    },
+    {
+      id: 'artisan-5',
+      name: 'Wood Carver',
+      image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjRkY2QjAwIi8+CjxjaXJjbGUgY3g9IjUwIiBjeT0iNDAiIHI9IjE1IiBmaWxsPSIjRkZEMDAwIi8+CjxwYXRoIGQ9Ik0yMCA3MEw0MCA1MEw2MCA3MEw4MCA1MEwxMDAgNzBMMTAwIDkwSDIwVjcwWiIgZmlsbD0iI0ZGRkZGRiIvPgo8cGF0aCBkPSJNMzAgNzVINzBWODVIMzBWNzVaIiBmaWxsPSIjRkZEMDAwIi8+Cjwvc3ZnPgo=',
+      description: 'Master wood carver'
+    }
+  ];
 
   // Sync with auth context when user data changes
   useEffect(() => {
@@ -54,6 +93,20 @@ export default function ProfilePage() {
       setBioText(user.bio || '');
     }
   }, [user]);
+
+  // Close avatar options when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (avatarOptionsRef.current && !avatarOptionsRef.current.contains(event.target as Node)) {
+        setShowAvatarOptions(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handleMicClick = async (field: 'bio' | 'skills') => {
     if (isRecording) {
@@ -287,15 +340,170 @@ export default function ProfilePage() {
     }
   };
 
+  const handleAvatarUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type and size
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+    if (!allowedTypes.includes(file.type)) {
+      toast({
+        variant: "destructive",
+        title: "Invalid File Type",
+        description: "Please upload JPG, PNG or GIF files only.",
+      });
+      return;
+    }
+
+    if (file.size > 2 * 1024 * 1024) { // 2MB limit
+      toast({
+        variant: "destructive",
+        title: "File Too Large",
+        description: "Please upload files smaller than 2MB.",
+      });
+      return;
+    }
+
+    setIsUploadingAvatar(true);
+    
+    try {
+      // Simulate upload process
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // Convert file to base64 for demo purposes
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const base64Image = e.target?.result as string;
+        setCurrentUser(prev => ({
+          ...prev,
+          avatarUrl: base64Image
+        }));
+        login({ ...currentUser, avatarUrl: base64Image });
+        
+        toast({
+          title: "Avatar Updated",
+          description: "Your profile picture has been updated successfully.",
+        });
+      };
+      reader.readAsDataURL(file);
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Upload Failed",
+        description: "Could not upload avatar. Please try again.",
+      });
+    } finally {
+      setIsUploadingAvatar(false);
+    }
+  };
+
+  const handleAvatarSelect = (avatar: typeof themedAvatars[0]) => {
+    setSelectedAvatar(avatar.id);
+    setCurrentUser(prev => ({
+      ...prev,
+      avatarUrl: avatar.image
+    }));
+    login({ ...currentUser, avatarUrl: avatar.image });
+    setShowAvatarOptions(false);
+    
+    toast({
+      title: "Avatar Selected",
+      description: `You've chosen the ${avatar.name} avatar.`,
+    });
+  };
+
   return (
     <div className="grid gap-8 md:grid-cols-3">
       <div className="md:col-span-1 space-y-8">
         <Card>
           <CardContent className="pt-6 flex flex-col items-center text-center">
-            <Avatar className="h-24 w-24 mb-4 border-4 border-primary">
-              <AvatarImage src={currentUser.avatarUrl} alt={currentUser.name} />
-              <AvatarFallback>{currentUser.name.charAt(0)}</AvatarFallback>
-            </Avatar>
+            <div className="relative group">
+              <Avatar className="h-24 w-24 mb-4 border-4 border-primary">
+                <AvatarImage src={currentUser.avatarUrl} alt={currentUser.name} />
+                <AvatarFallback>{currentUser.name.charAt(0)}</AvatarFallback>
+              </Avatar>
+              <Button
+                size="sm"
+                className="absolute -bottom-2 -right-2 h-8 w-8 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                onClick={() => setShowAvatarOptions(!showAvatarOptions)}
+                disabled={isUploadingAvatar}
+              >
+                {isUploadingAvatar ? (
+                  <ChakraLoader className="h-4 w-4" />
+                ) : (
+                  <Camera className="h-4 w-4" />
+                )}
+              </Button>
+            </div>
+            
+            {showAvatarOptions && (
+              <div ref={avatarOptionsRef} className="absolute top-20 left-1/2 transform -translate-x-1/2 z-50 bg-white border rounded-lg shadow-lg p-4 w-80">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-semibold">Change Avatar</h3>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setShowAvatarOptions(false)}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                  
+                  {/* Upload Option */}
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium">Upload Your Photo</Label>
+                    <input
+                      type="file"
+                      id="avatar-upload"
+                      accept="image/jpeg,image/jpg,image/png,image/gif"
+                      onChange={handleAvatarUpload}
+                      className="hidden"
+                      disabled={isUploadingAvatar}
+                    />
+                    <label htmlFor="avatar-upload">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-full cursor-pointer"
+                        disabled={isUploadingAvatar}
+                      >
+                        <Upload className="h-4 w-4 mr-2" />
+                        {isUploadingAvatar ? 'Uploading...' : 'Choose File'}
+                      </Button>
+                    </label>
+                    <p className="text-xs text-muted-foreground">
+                      JPG, PNG or GIF. Max size 2MB.
+                    </p>
+                  </div>
+                  
+                  <div className="border-t pt-4">
+                    <Label className="text-sm font-medium">Choose Themed Avatar</Label>
+                    <div className="grid grid-cols-3 gap-2 mt-2">
+                      {themedAvatars.map((avatar) => (
+                        <button
+                          key={avatar.id}
+                          onClick={() => handleAvatarSelect(avatar)}
+                          className={`p-2 rounded-lg border-2 transition-colors ${
+                            selectedAvatar === avatar.id
+                              ? 'border-primary bg-primary/10'
+                              : 'border-gray-200 hover:border-primary/50'
+                          }`}
+                        >
+                          <img
+                            src={avatar.image}
+                            alt={avatar.name}
+                            className="w-12 h-12 rounded-full mx-auto mb-1"
+                          />
+                          <p className="text-xs font-medium">{avatar.name}</p>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+            
             <h1 className="text-2xl font-bold font-headline">{currentUser.name}</h1>
             <p className="text-muted-foreground flex items-center gap-2">
               <MapPin className="h-4 w-4" /> {currentUser.location}
