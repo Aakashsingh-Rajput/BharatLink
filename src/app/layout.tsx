@@ -5,11 +5,8 @@ import { Toaster } from '@/components/ui/toaster';
 import { cn } from '@/lib/utils';
 import { AuthProvider } from '@/contexts/auth-context';
 import { TranslationProvider } from '@/contexts/translation-context';
-<<<<<<< HEAD
-=======
 import { ClientProvider } from '@/components/providers/client-provider';
 import { Chatbot } from '@/components/chatbot/chatbot';
->>>>>>> 59c34d88d5eb90763502272d7a37b82bcfdacde3
 
 export const metadata: Metadata = {
   title: 'BharatLink – Rural Skill-to-Work Network',
@@ -43,14 +40,6 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=PT+Sans:wght@400;700&display=swap" rel="stylesheet" />
       </head>
       <body className={cn('font-body antialiased', fontHeadline.variable, fontBody.variable)} suppressHydrationWarning>
-<<<<<<< HEAD
-        <TranslationProvider>
-          <AuthProvider>
-            {children}
-            <Toaster />
-          </AuthProvider>
-        </TranslationProvider>
-=======
         <ClientProvider>
           <TranslationProvider>
             <AuthProvider>
@@ -60,7 +49,6 @@ export default function RootLayout({
             </AuthProvider>
           </TranslationProvider>
         </ClientProvider>
->>>>>>> 59c34d88d5eb90763502272d7a37b82bcfdacde3
       </body>
     </html>
   );
