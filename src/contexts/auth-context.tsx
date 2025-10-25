@@ -8,9 +8,10 @@ interface MicroCertificate {
   skill: string;
   issuer: string;
   dateEarned: string;
-  blockchainHash: string;
+  blockchainHash?: string;
   verificationUrl: string;
   description: string;
+  level: 'beginner' | 'intermediate' | 'advanced' | 'expert';
 }
 
 interface User {
@@ -23,6 +24,7 @@ interface User {
   avatarUrl: string;
   skills?: string[];
   endorsements?: string[];
+  microCertificates?: MicroCertificate[];
 }
 
 interface AuthContextType {

@@ -20,7 +20,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { X, Plus } from "lucide-react";
+import { X, Plus, Save, Eye, AlertCircle, CheckCircle } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface JobPostFormProps {
   onSubmit: (jobData: JobFormData) => void;
@@ -74,9 +75,17 @@ export function JobPostForm({ onSubmit, initialData, isLoading }: JobPostFormPro
   });
 
   const [newSkill, setNewSkill] = useState("");
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isPreviewMode, setIsPreviewMode] = useState(false);
+  const [isDraft, setIsDraft] = useState(false);
+  const { toast } = useToast();
 
   const handleInputChange = (field: keyof JobFormData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+    // Clear error when user starts typing
+    if (errors[field]) {
+      setErrors(prev => ({ ...prev, [field]: "" }));
+    }
   };
 
   const handleAddSkill = (skill: string) => {
@@ -85,8 +94,8 @@ export function JobPostForm({ onSubmit, initialData, isLoading }: JobPostFormPro
         ...prev,
         skillsRequired: [...prev.skillsRequired, skill]
       }));
+      setNewSkill("");
     }
-    setNewSkill("");
   };
 
   const handleRemoveSkill = (skillToRemove: string) => {
@@ -96,18 +105,159 @@ export function JobPostForm({ onSubmit, initialData, isLoading }: JobPostFormPro
     }));
   };
 
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {};
+    
+    if (!formData.title.trim()) {
+      newErrors.title = "Job title is required";
+    }
+    if (!formData.description.trim()) {
+      newErrors.description = "Job description is required";
+    }
+    if (!formData.location.trim()) {
+      newErrors.location = "Location is required";
+    }
+    if (!formData.type) {
+      newErrors.type = "Job type is required";
+    }
+    if (!formData.experience) {
+      newErrors.experience = "Experience level is required";
+    }
+    if (formData.skillsRequired.length === 0) {
+      newErrors.skillsRequired = "At least one skill is required";
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(formData);
+    if (validateForm()) {
+      onSubmit(formData);
+      toast({
+        title: "Job Posted Successfully",
+        description: "Your job posting has been published and is now visible to candidates.",
+      });
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Validation Error",
+        description: "Please fill in all required fields correctly.",
+      });
+    }
   };
+
+  const handleSaveDraft = () => {
+    setIsDraft(true);
+    const draftData = { ...formData, status: "Draft" };
+    onSubmit(draftData);
+    toast({
+      title: "Draft Saved",
+      description: "Your job posting has been saved as a draft.",
+    });
+  };
+
+  const handlePreview = () => {
+    if (validateForm()) {
+      setIsPreviewMode(!isPreviewMode);
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Cannot Preview",
+        description: "Please fill in all required fields to preview the job posting.",
+      });
+    }
+  };
+
+  if (isPreviewMode) {
+    return (
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <div>
+            <CardTitle>Job Post Preview</CardTitle>
+            <CardDescription>
+              This is how your job posting will appear to candidates
+            </CardDescription>
+          </div>
+          <Button variant="outline" onClick={() => setIsPreviewMode(false)}>
+            <X className="h-4 w-4 mr-2" />
+            Edit
+          </Button>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="border rounded-lg p-6 bg-gradient-to-r from-primary/5 to-secondary/5">
+            <div className="flex items-start justify-between mb-4">
+              <div>
+                <h2 className="text-2xl font-bold text-primary">{formData.title}</h2>
+                <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
+                  <span>{formData.location}</span>
+                  <span>•</span>
+                  <span>{formData.type}</span>
+                  <span>•</span>
+                  <span>{formData.experience}</span>
+                  {formData.salary && (
+                    <>
+                      <span>•</span>
+                      <span className="font-semibold text-green-600">{formData.salary}</span>
+                    </>
+                  )}
+                </div>
+              </div>
+              <Badge variant="outline" className="bg-green-100 text-green-800">
+                {formData.status}
+              </Badge>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <h3 className="font-semibold mb-2">Job Description</h3>
+                <p className="text-sm leading-relaxed whitespace-pre-wrap">{formData.description}</p>
+              </div>
+              
+              <div>
+                <h3 className="font-semibold mb-2">Required Skills</h3>
+                <div className="flex flex-wrap gap-2">
+                  {formData.skillsRequired.map((skill) => (
+                    <Badge key={skill} variant="secondary">
+                      {skill}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="flex gap-2">
+            <Button onClick={handleSubmit} className="flex-1">
+              <CheckCircle className="h-4 w-4 mr-2" />
+              Publish Job
+            </Button>
+            <Button variant="outline" onClick={handleSaveDraft}>
+              <Save className="h-4 w-4 mr-2" />
+              Save as Draft
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Create New Job Post</CardTitle>
-        <CardDescription>
-          Fill in the details to create a new job posting for artisans and craftspeople.
-        </CardDescription>
+      <CardHeader className="flex flex-row items-center justify-between">
+        <div>
+          <CardTitle>Create New Job Post</CardTitle>
+          <CardDescription>
+            Fill in the details to create a new job posting for artisans and craftspeople.
+          </CardDescription>
+        </div>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={handlePreview}>
+            <Eye className="h-4 w-4 mr-2" />
+            Preview
+          </Button>
+        </div>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -119,8 +269,15 @@ export function JobPostForm({ onSubmit, initialData, isLoading }: JobPostFormPro
                 value={formData.title}
                 onChange={(e) => handleInputChange("title", e.target.value)}
                 placeholder="e.g., Senior Textile Designer"
+                className={errors.title ? "border-red-500" : ""}
                 required
               />
+              {errors.title && (
+                <div className="flex items-center gap-1 text-sm text-red-600">
+                  <AlertCircle className="h-3 w-3" />
+                  {errors.title}
+                </div>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="location">Location *</Label>
@@ -129,8 +286,15 @@ export function JobPostForm({ onSubmit, initialData, isLoading }: JobPostFormPro
                 value={formData.location}
                 onChange={(e) => handleInputChange("location", e.target.value)}
                 placeholder="e.g., Mumbai, Maharashtra"
+                className={errors.location ? "border-red-500" : ""}
                 required
               />
+              {errors.location && (
+                <div className="flex items-center gap-1 text-sm text-red-600">
+                  <AlertCircle className="h-3 w-3" />
+                  {errors.location}
+                </div>
+              )}
             </div>
           </div>
 
@@ -142,15 +306,22 @@ export function JobPostForm({ onSubmit, initialData, isLoading }: JobPostFormPro
               onChange={(e) => handleInputChange("description", e.target.value)}
               placeholder="Describe the role, responsibilities, and what you're looking for..."
               rows={4}
+              className={errors.description ? "border-red-500" : ""}
               required
             />
+            {errors.description && (
+              <div className="flex items-center gap-1 text-sm text-red-600">
+                <AlertCircle className="h-3 w-3" />
+                {errors.description}
+              </div>
+            )}
           </div>
 
           <div className="grid gap-4 md:grid-cols-3">
             <div className="space-y-2">
               <Label htmlFor="type">Job Type *</Label>
               <Select value={formData.type} onValueChange={(value) => handleInputChange("type", value)}>
-                <SelectTrigger>
+                <SelectTrigger className={errors.type ? "border-red-500" : ""}>
                   <SelectValue placeholder="Select job type" />
                 </SelectTrigger>
                 <SelectContent>
@@ -161,11 +332,17 @@ export function JobPostForm({ onSubmit, initialData, isLoading }: JobPostFormPro
                   ))}
                 </SelectContent>
               </Select>
+              {errors.type && (
+                <div className="flex items-center gap-1 text-sm text-red-600">
+                  <AlertCircle className="h-3 w-3" />
+                  {errors.type}
+                </div>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="experience">Experience Level *</Label>
               <Select value={formData.experience} onValueChange={(value) => handleInputChange("experience", value)}>
-                <SelectTrigger>
+                <SelectTrigger className={errors.experience ? "border-red-500" : ""}>
                   <SelectValue placeholder="Select experience" />
                 </SelectTrigger>
                 <SelectContent>
@@ -176,6 +353,12 @@ export function JobPostForm({ onSubmit, initialData, isLoading }: JobPostFormPro
                   ))}
                 </SelectContent>
               </Select>
+              {errors.experience && (
+                <div className="flex items-center gap-1 text-sm text-red-600">
+                  <AlertCircle className="h-3 w-3" />
+                  {errors.experience}
+                </div>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="salary">Salary Range</Label>
@@ -201,6 +384,12 @@ export function JobPostForm({ onSubmit, initialData, isLoading }: JobPostFormPro
                 </Badge>
               ))}
             </div>
+            {errors.skillsRequired && (
+              <div className="flex items-center gap-1 text-sm text-red-600">
+                <AlertCircle className="h-3 w-3" />
+                {errors.skillsRequired}
+              </div>
+            )}
             <div className="flex gap-2">
               <Select value={newSkill} onValueChange={setNewSkill}>
                 <SelectTrigger className="flex-1">
@@ -245,11 +434,16 @@ export function JobPostForm({ onSubmit, initialData, isLoading }: JobPostFormPro
           </div>
 
           <div className="flex gap-2 pt-4">
-            <Button type="submit" disabled={isLoading}>
-              {isLoading ? "Creating..." : "Create Job Post"}
+            <Button type="submit" disabled={isLoading} className="flex-1">
+              {isLoading ? "Creating..." : "Publish Job"}
             </Button>
-            <Button type="button" variant="outline">
+            <Button type="button" variant="outline" onClick={handleSaveDraft}>
+              <Save className="h-4 w-4 mr-2" />
               Save as Draft
+            </Button>
+            <Button type="button" variant="outline" onClick={handlePreview}>
+              <Eye className="h-4 w-4 mr-2" />
+              Preview
             </Button>
           </div>
         </form>
