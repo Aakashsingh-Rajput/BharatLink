@@ -5,42 +5,61 @@ import {
   suggestRelevantOpportunities,
   type RelevantOpportunitiesOutput,
 } from "@/ai/flows/suggest-relevant-opportunities";
-import { currentUser } from "@/lib/data";
+import { currentUser, Opportunity } from "@/lib/data";
+import { useAuth } from "@/contexts/auth-context";
 import OpportunityCard from "./opportunity-card";
 import { Skeleton } from "../ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { AlertCircle } from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 
-export default function OpportunityList() {
-  const [opportunities, setOpportunities] =
-    useState<RelevantOpportunitiesOutput["opportunities"] | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+type OpportunityListProps = {
+  searchQuery?: string;
+  filters?: string[];
+  opportunities?: Opportunity[];
+};
+
+export default function OpportunityList({ 
+  searchQuery = "", 
+  filters = [], 
+  opportunities: providedOpportunities 
+}: OpportunityListProps) {
+  const { user } = useAuth();
+  const [aiOpportunities, setAiOpportunities] = useState<RelevantOpportunitiesOutput["opportunities"] | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    async function fetchOpportunities() {
-      setIsLoading(true);
-      setError(null);
-      try {
-        const result = await suggestRelevantOpportunities({
-          skills: currentUser.skills,
-          location: currentUser.location,
-          endorsements: currentUser.endorsements.length,
-          jobTypes: ["full-time", "contract", "part-time"],
-          industry: "Handicrafts",
-        });
-        setOpportunities(result.opportunities);
-      } catch (e) {
-        setError("Failed to load opportunities. Please try again later.");
-        console.error(e);
-      } finally {
-        setIsLoading(false);
-      }
-    }
+  // Use authenticated user data or fallback to currentUser for demo purposes
+  const displayUser = user || currentUser;
 
-    fetchOpportunities();
-  }, []);
+  // Use provided opportunities or fetch from AI
+  const allOpportunities = providedOpportunities || aiOpportunities;
+
+  useEffect(() => {
+    if (!providedOpportunities) {
+      async function fetchOpportunities() {
+        setIsLoading(true);
+        setError(null);
+        try {
+          const result = await suggestRelevantOpportunities({
+            skills: displayUser.skills || [],
+            location: displayUser.location || '',
+            endorsements: displayUser.endorsements?.length || 0,
+            jobTypes: ["full-time", "contract", "part-time"],
+            industry: "Handicrafts",
+          });
+          setAiOpportunities(result.opportunities);
+        } catch (e) {
+          setError("Failed to load opportunities. Please try again later.");
+          console.error(e);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+
+      fetchOpportunities();
+    }
+  }, [providedOpportunities, displayUser]);
 
   if (isLoading) {
     return <OpportunityListSkeleton />;
@@ -56,22 +75,47 @@ export default function OpportunityList() {
     );
   }
 
-  if (!opportunities || opportunities.length === 0) {
+  if (!allOpportunities || allOpportunities.length === 0) {
     return (
       <div className="text-center py-10 border border-dashed rounded-lg">
-        <h3 className="text-xl font-semibold font-headline">No Opportunities Found</h3>
+        <h3 className="text-xl font-semibold font-headline">
+          {searchQuery || filters.length > 0 ? "No Matching Opportunities Found" : "No Opportunities Found"}
+        </h3>
         <p className="text-muted-foreground mt-2">
-          We couldn't find any opportunities matching your profile right now.
+          {searchQuery || filters.length > 0 
+            ? "Try adjusting your search criteria or filters."
+            : "We couldn't find any opportunities matching your profile right now."
+          }
         </p>
+        {searchQuery && (
+          <div className="mt-4">
+            <p className="text-sm text-muted-foreground">Search results for: "{searchQuery}"</p>
+          </div>
+        )}
       </div>
     );
   }
 
   return (
     <div className="space-y-4">
-      {opportunities.map((opp, index) => (
-        <OpportunityCard key={index} opportunity={opp} />
-      ))}
+      {searchQuery && (
+        <div className="text-sm text-muted-foreground mb-4">
+          Showing {allOpportunities.length} result{allOpportunities.length !== 1 ? 's' : ''} for "{searchQuery}"
+        </div>
+      )}
+      {allOpportunities.map((opp, index) => {
+        // Ensure the opportunity has all required fields for OpportunityCard
+        const opportunity = {
+          id: (opp as any).id || `ai-${index}`,
+          title: opp.title,
+          company: (opp as any).company || 'AI Suggested',
+          location: opp.location,
+          description: opp.description,
+          skillsRequired: opp.skillsRequired,
+          trustScore: opp.trustScore,
+        };
+        return <OpportunityCard key={opportunity.id} opportunity={opportunity} />;
+      })}
     </div>
   );
 }

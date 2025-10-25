@@ -24,6 +24,7 @@ import { DashboardStats } from "@/components/employer/DashboardStats";
 import { JobPostForm, JobFormData } from "@/components/employer/JobPostForm";
 import { ApplicantList } from "@/components/employer/ApplicantList";
 import employerData from "@/data/employerData.json";
+import { useTranslation } from "@/contexts/translation-context";
 
 interface Applicant {
   id: string;
@@ -58,6 +59,7 @@ interface JobPost {
 }
 
 export default function EmployerDashboard() {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState("overview");
   const [isCreatingJob, setIsCreatingJob] = useState(false);
   const [jobPosts, setJobPosts] = useState<JobPost[]>(employerData.jobPosts);
@@ -93,15 +95,15 @@ export default function EmployerDashboard() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold font-headline">
-            Employer Dashboard
+            {t('employer.dashboard_title')}
           </h1>
           <p className="text-muted-foreground">
-            Welcome back to {employerData.employer.company}! Manage your job posts and applicants.
+            {t('employer.welcome_message', { company: employerData.employer.company })}
           </p>
         </div>
         <Button onClick={() => setIsCreatingJob(true)} className="gap-2">
           <Plus className="h-4 w-4" />
-          Post New Job
+          {t('employer.post_new_job')}
         </Button>
       </div>
 
@@ -109,10 +111,10 @@ export default function EmployerDashboard() {
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="jobs">Job Posts</TabsTrigger>
-          <TabsTrigger value="applicants">Applicants</TabsTrigger>
-          <TabsTrigger value="analytics">Analytics</TabsTrigger>
+          <TabsTrigger value="overview">{t('employer.overview')}</TabsTrigger>
+          <TabsTrigger value="jobs">{t('employer.job_posts')}</TabsTrigger>
+          <TabsTrigger value="applicants">{t('employer.applicants')}</TabsTrigger>
+          <TabsTrigger value="analytics">{t('employer.analytics')}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-4">
@@ -122,10 +124,10 @@ export default function EmployerDashboard() {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Briefcase className="h-5 w-5" />
-                    Recent Job Posts
+                    {t('employer.recent_job_posts')}
                   </CardTitle>
                   <CardDescription>
-                    Your latest job postings and their performance
+                    {t('employer.recent_job_posts_desc')}
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -136,7 +138,7 @@ export default function EmployerDashboard() {
                         <div className="flex items-center gap-4 text-sm text-muted-foreground">
                           <span>{job.location}</span>
                           <span>{job.type}</span>
-                          <span>{job.applicantCount} applicants</span>
+                          <span>{job.applicantCount} {t('employer.applicants')}</span>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">

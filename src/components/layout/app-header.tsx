@@ -18,12 +18,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { currentUser } from "@/lib/data";
 import { useState, useRef, useCallback } from "react";
 import { speechToText } from "@/ai/flows/speech-to-text";
 import { ChakraLoader } from "../ui/loader";
 import { useAuth } from "@/contexts/auth-context";
 import Link from "next/link";
+import { LanguageSelector } from "./language-selector";
 
 export function AppHeader() {
   const { user, logout, isAuthenticated } = useAuth();
@@ -86,7 +86,7 @@ export function AppHeader() {
             <Input
               type="search"
               placeholder="Search for skills, artisans, or jobs..."
-              className="w-full appearance-none bg-transparent pl-8 md:w-2/3 lg:w-1/3"
+              className="w-full appearance-none bg-transparent pl-8 md:w-4/5 lg:w-3/5 xl:w-1/2"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -104,6 +104,7 @@ export function AppHeader() {
       </div>
       {isAuthenticated ? (
         <>
+          <LanguageSelector />
           <Button variant="ghost" size="icon" className="rounded-full">
             <Bell className="h-5 w-5" />
             <span className="sr-only">Toggle notifications</span>
@@ -133,6 +134,7 @@ export function AppHeader() {
         </>
       ) : (
         <div className="flex items-center gap-2">
+          <LanguageSelector />
           <Button variant="ghost" asChild>
             <Link href="/auth/signin">Sign In</Link>
           </Button>

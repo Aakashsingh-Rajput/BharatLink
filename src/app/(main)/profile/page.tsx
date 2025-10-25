@@ -4,9 +4,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Edit, Mail, MapPin, Quote, Share2, Mic } from "lucide-react";
+import { Edit, Mail, MapPin, Quote, Share2, Mic, Award } from "lucide-react";
 import EndorsementSummary from "@/components/profile/endorsement-summary";
-import MicroCertificates from "@/components/profile/micro-certificates";
+import { MicroCertificateCard } from "@/components/profile/micro-certificate-card";
+import { CertificateModal } from "@/components/profile/certificate-modal";
 import { useState, useRef, useEffect } from 'react';
 import { speechToText } from "@/ai/flows/speech-to-text";
 import { ChakraLoader } from "@/components/ui/loader";
@@ -14,24 +15,27 @@ import { useToast } from "@/hooks/use-toast";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/contexts/auth-context";
 import { UserInfoSync } from "@/components/profile/user-info-sync";
-import { currentUser as sampleUser } from "@/lib/data";
+import { useTranslation } from "@/contexts/translation-context";
+import { MicroCertificate } from "@/lib/data";
 
 export default function ProfilePage() {
+  const { t } = useTranslation();
   const { user, login } = useAuth();
   const [currentUser, setCurrentUser] = useState(user || {
-    name: sampleUser.name,
-    email: 'ramesh.kumar@example.com',
-    location: sampleUser.location,
-    bio: sampleUser.bio,
-    avatarUrl: sampleUser.avatarUrl,
+    name: 'User',
+    email: '',
+    location: '',
+    bio: '',
+    avatarUrl: '/placeholder-avatar.jpg',
     userType: 'artisan' as const,
-    skills: sampleUser.skills,
-    endorsements: sampleUser.endorsements,
-    microCertificates: sampleUser.microCertificates
+    skills: [],
+    endorsements: []
   });
   const [isRecording, setIsRecording] = useState<string | null>(null);
   const [isEditingBio, setIsEditingBio] = useState(false);
   const [bioText, setBioText] = useState(currentUser.bio || '');
+  const [selectedCertificate, setSelectedCertificate] = useState<MicroCertificate | null>(null);
+  const [isCertificateModalOpen, setIsCertificateModalOpen] = useState(false);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
@@ -82,7 +86,10 @@ export default function ProfilePage() {
               setIsEditingBio(true); // Keep editing mode open to allow saving
             } else if (field === 'skills') {
               const newSkills = result.text.split(',').map(s => s.trim()).filter(Boolean);
-              setCurrentUser(prev => ({ ...prev, skills: [...new Set([...(prev.skills || []), ...newSkills])] }));
+              setCurrentUser(prev => ({ 
+                ...prev, 
+                skills: [...new Set([...(prev.skills || []), ...newSkills])] 
+              }));
               toast({
                 title: "Skills Updated",
                 description: "New skills have been added to your profile.",
@@ -125,6 +132,16 @@ export default function ProfilePage() {
     });
   }
 
+  const handleViewCertificate = (certificate: MicroCertificate) => {
+    setSelectedCertificate(certificate);
+    setIsCertificateModalOpen(true);
+  };
+
+  const handleCloseCertificateModal = () => {
+    setIsCertificateModalOpen(false);
+    setSelectedCertificate(null);
+  };
+
   return (
     <div className="grid gap-8 md:grid-cols-3">
       <div className="md:col-span-1 space-y-8">
@@ -140,20 +157,20 @@ export default function ProfilePage() {
             </p>
             <div className="mt-4 flex gap-2">
               <Button size="sm">
-                <Mail className="h-4 w-4 mr-2" /> Contact
+                <Mail className="h-4 w-4 mr-2" /> {t('profile.contact')}
               </Button>
               <Button size="sm" variant="outline">
-                <Share2 className="h-4 w-4 mr-2" /> Share
+                <Share2 className="h-4 w-4 mr-2" /> {t('profile.share')}
               </Button>
             </div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="font-headline">About</CardTitle>
+            <CardTitle className="font-headline">{t('profile.about')}</CardTitle>
             <div className="flex items-center gap-1">
               {isEditingBio ? (
-                 <Button onClick={handleSaveBio} size="sm">Save</Button>
+                 <Button onClick={handleSaveBio} size="sm">{t('common.save')}</Button>
               ) : (
                 <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setIsEditingBio(true)}>
                   <Edit className="h-4 w-4"/>
@@ -177,42 +194,80 @@ export default function ProfilePage() {
       <div className="md:col-span-2 space-y-8">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="font-headline">Skills</CardTitle>
+            <CardTitle className="font-headline">{t('profile.skills')}</CardTitle>
             <Button variant="outline" size="sm" onClick={() => handleMicClick('skills')}>
                 {isRecording === 'skills' ? <ChakraLoader className="h-4 w-4" /> : <Mic className="h-4 w-4 mr-2"/>}
-                Add Skills with Voice
+                {t('profile.add_skills_voice')}
             </Button>
           </CardHeader>
           <CardContent className="flex flex-wrap gap-2">
-            {(currentUser.skills || []).map((skill) => (
+            {currentUser.skills?.map((skill) => (
               <Badge key={skill} variant="default" className="text-sm px-3 py-1 bg-primary/20 text-primary-foreground hover:bg-primary/30">
                 {skill}
               </Badge>
-            ))}
+            )) || (
+              <p className="text-sm text-muted-foreground">{t('profile.no_skills_yet')}</p>
+            )}
           </CardContent>
         </Card>
         
         <EndorsementSummary endorsements={currentUser.endorsements || []} />
 
-        <MicroCertificates certificates={currentUser.microCertificates || []} />
+        {/* Micro-Certificates Section */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="font-headline flex items-center gap-2">
+              <Award className="h-5 w-5 text-primary" />
+              Micro-Certificates ({currentUser.microCertificates?.length || 0})
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {currentUser.microCertificates && currentUser.microCertificates.length > 0 ? (
+              <div className="grid gap-4 md:grid-cols-2">
+                {currentUser.microCertificates.map((certificate) => (
+                  <MicroCertificateCard
+                    key={certificate.id}
+                    certificate={certificate}
+                    onViewDetails={handleViewCertificate}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-8 text-muted-foreground">
+                <Award className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                <p className="text-sm">No micro-certificates yet</p>
+                <p className="text-xs mt-1">Complete skill assessments to earn blockchain-verified certificates</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle className="font-headline">Endorsements ({(currentUser.endorsements || []).length})</CardTitle>
+            <CardTitle className="font-headline">{t('profile.endorsements')} ({currentUser.endorsements?.length || 0})</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {(currentUser.endorsements || []).map((endorsement, index) => (
+            {currentUser.endorsements?.map((endorsement, index) => (
               <div key={index} className="flex items-start gap-4 p-4 bg-secondary/50 rounded-lg">
                 <Quote className="h-5 w-5 text-accent flex-shrink-0 mt-1" />
                 <p className="text-sm text-muted-foreground italic">"{endorsement}"</p>
               </div>
-            ))}
+            )) || (
+              <p className="text-sm text-muted-foreground">{t('profile.no_endorsements_yet')}</p>
+            )}
           </CardContent>
         </Card>
 
         {/* Data Sync Demonstration */}
         <UserInfoSync />
       </div>
+
+      {/* Certificate Modal */}
+      <CertificateModal
+        certificate={selectedCertificate}
+        isOpen={isCertificateModalOpen}
+        onClose={handleCloseCertificateModal}
+      />
     </div>
   );
 }

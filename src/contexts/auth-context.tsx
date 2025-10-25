@@ -23,7 +23,6 @@ interface User {
   avatarUrl: string;
   skills?: string[];
   endorsements?: string[];
-  microCertificates?: MicroCertificate[];
 }
 
 interface AuthContextType {

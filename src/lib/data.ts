@@ -1,11 +1,13 @@
 export type MicroCertificate = {
   id: string;
-  title: string;
   skill: string;
   issuer: string;
-  dateEarned: string;
-  blockchainHash: string;
+  issuedDate: string;
+  expiryDate?: string;
   verificationUrl: string;
+  blockchainHash?: string;
+  qrCodeData: string;
+  level: 'beginner' | 'intermediate' | 'advanced' | 'expert';
   description: string;
 };
 
@@ -17,7 +19,8 @@ export type User = {
   skills: string[];
   endorsements: string[];
   bio: string;
-  microCertificates: MicroCertificate[];
+  userType: 'artisan' | 'employer';
+  microCertificates?: MicroCertificate[];
 };
 
 export type Opportunity = {
@@ -58,6 +61,7 @@ export const currentUser: User = {
   location: 'Jaipur, Rajasthan',
   skills: ['Block Printing', 'Natural Dyes', 'Textile Design', 'Handicraft Marketing'],
   bio: 'A passionate 4th generation artisan specializing in traditional Bagru and Sanganeri block printing. Seeking to collaborate with designers to bring ancient crafts to modern markets.',
+  userType: 'artisan',
   endorsements: [
     'Ramesh is a master of his craft. His attention to detail and knowledge of natural dyes is unparalleled. - Local NGO Head',
     'We collaborated with Ramesh for a new collection. He was professional, delivered on time, and the quality was exceptional. - Urban Designer',
@@ -66,36 +70,40 @@ export const currentUser: User = {
   ],
   microCertificates: [
     {
-      id: 'cert-1',
-      title: 'Advanced Block Printing Techniques',
+      id: 'cert-001',
       skill: 'Block Printing',
       issuer: 'Rajasthan Handicrafts Board',
-      dateEarned: '2024-01-15',
+      issuedDate: '2024-01-15',
+      expiryDate: '2027-01-15',
+      verificationUrl: 'https://verify.artisanplatform.com/cert-001',
       blockchainHash: '0x1a2b3c4d5e6f7890abcdef1234567890abcdef1234567890abcdef1234567890',
-      verificationUrl: 'https://verify.bharatlink.in/cert/0x1a2b3c4d5e6f7890abcdef1234567890abcdef1234567890abcdef1234567890',
-      description: 'Certified in advanced block printing techniques including traditional Bagru and Sanganeri methods with natural dyes.'
+      qrCodeData: 'https://verify.artisanplatform.com/cert-001',
+      level: 'expert',
+      description: 'Certified expert in traditional Bagru and Sanganeri block printing techniques with 15+ years of experience.'
     },
     {
-      id: 'cert-2',
-      title: 'Natural Dye Mastery',
+      id: 'cert-002',
       skill: 'Natural Dyes',
-      issuer: 'Indian Textile Heritage Foundation',
-      dateEarned: '2024-02-28',
+      issuer: 'Sustainable Textiles Institute',
+      issuedDate: '2023-08-20',
+      verificationUrl: 'https://verify.artisanplatform.com/cert-002',
       blockchainHash: '0x2b3c4d5e6f7890abcdef1234567890abcdef1234567890abcdef1234567890ab',
-      verificationUrl: 'https://verify.bharatlink.in/cert/0x2b3c4d5e6f7890abcdef1234567890abcdef1234567890abcdef1234567890ab',
-      description: 'Expert certification in natural dye preparation, color extraction, and sustainable textile coloring methods.'
+      qrCodeData: 'https://verify.artisanplatform.com/cert-002',
+      level: 'advanced',
+      description: 'Advanced certification in natural dye preparation and application techniques.'
     },
     {
-      id: 'cert-3',
-      title: 'Digital Marketing for Artisans',
-      skill: 'Handicraft Marketing',
-      issuer: 'Digital India Skill Development',
-      dateEarned: '2024-03-10',
+      id: 'cert-003',
+      skill: 'Textile Design',
+      issuer: 'National Institute of Design',
+      issuedDate: '2023-12-10',
+      verificationUrl: 'https://verify.artisanplatform.com/cert-003',
       blockchainHash: '0x3c4d5e6f7890abcdef1234567890abcdef1234567890abcdef1234567890abcd',
-      verificationUrl: 'https://verify.bharatlink.in/cert/0x3c4d5e6f7890abcdef1234567890abcdef1234567890abcdef1234567890abcd',
-      description: 'Certified in digital marketing strategies specifically tailored for traditional handicraft businesses and online sales.'
+      qrCodeData: 'https://verify.artisanplatform.com/cert-003',
+      level: 'intermediate',
+      description: 'Professional certification in contemporary textile design principles and digital design tools.'
     }
-  ],
+  ]
 };
 
 export const opportunities: Opportunity[] = [
@@ -104,8 +112,8 @@ export const opportunities: Opportunity[] = [
     title: 'Textile Designer for Sustainable Fashion Brand',
     company: 'EcoVastra',
     location: 'Remote/Mumbai',
-    description: 'Seeking a textile designer with knowledge of traditional Indian printing techniques for a new sustainable clothing line.',
-    skillsRequired: ['Block Printing', 'Textile Design', 'Natural Dyes'],
+    description: 'Seeking a textile designer with knowledge of traditional Indian printing techniques for a new sustainable clothing line. Must have expertise in natural dyeing processes and contemporary design applications.',
+    skillsRequired: ['Block Printing', 'Textile Design', 'Natural Dyes', 'Adobe Creative Suite', 'Pattern Making'],
     trustScore: 92,
   },
   {
@@ -113,8 +121,8 @@ export const opportunities: Opportunity[] = [
     title: 'Lead Artisan for Craft Workshop',
     company: 'Craft Connect Initiative',
     location: 'Jaipur, Rajasthan',
-    description: 'Looking for an experienced artisan to lead workshops for tourists and design students on block printing.',
-    skillsRequired: ['Block Printing', 'Communication', 'Teaching'],
+    description: 'Looking for an experienced artisan to lead workshops for tourists and design students on block printing. Must have teaching experience and deep knowledge of various craft forms.',
+    skillsRequired: ['Block Printing', 'Communication', 'Teaching', 'Workshop Planning', 'Craft Knowledge'],
     trustScore: 88,
   },
   {
@@ -122,19 +130,73 @@ export const opportunities: Opportunity[] = [
     title: 'Handicraft Sourcing Manager',
     company: 'Global Handicrafts Inc.',
     location: 'Remote/Delhi',
-    description: 'We need a sourcing expert to identify and partner with high-quality handicraft artisans across Rajasthan.',
-    skillsRequired: ['Handicraft Marketing', 'Negotiation', 'Quality Control'],
+    description: 'We need a sourcing expert to identify and partner with high-quality handicraft artisans across Rajasthan. Role involves quality assessment, price negotiation, and supply chain management.',
+    skillsRequired: ['Handicraft Marketing', 'Negotiation', 'Quality Control', 'Supply Chain Management', 'Vendor Relations'],
     trustScore: 85,
   },
-    {
+  {
     id: 'opp-4',
     title: 'Pottery Consultant for Home Decor Brand',
     company: 'Modern Homes',
     location: 'Bengaluru, Karnataka',
-    description: 'Consult on a new line of ceramic home goods, bringing traditional forms to a modern aesthetic.',
-    skillsRequired: ['Pottery', 'Ceramics', 'Glazing'],
+    description: 'Consult on a new line of ceramic home goods, bringing traditional forms to a modern aesthetic. Experience with both traditional and contemporary techniques required.',
+    skillsRequired: ['Pottery', 'Ceramics', 'Glazing', 'Kiln Operation', 'Design'],
     trustScore: 95,
   },
+  {
+    id: 'opp-5',
+    title: 'Wood Carving Specialist for Custom Furniture',
+    company: 'Heritage Furniture Co.',
+    location: 'Saharanpur, Uttar Pradesh',
+    description: 'Looking for experienced wood carver to work on custom furniture and decorative pieces. Must have expertise in traditional Indian carving techniques and modern design sensibilities.',
+    skillsRequired: ['Wood Carving', 'Furniture Making', 'Traditional Techniques', 'Tool Mastery', 'Design'],
+    trustScore: 89,
+  },
+  {
+    id: 'opp-6',
+    title: 'Embroidery Designer for Luxury Textiles',
+    company: 'Luxury Textiles Ltd.',
+    location: 'Ahmedabad, Gujarat',
+    description: 'We need a creative embroidery designer to develop new patterns and techniques for our luxury textile line. Experience with various regional embroidery styles preferred.',
+    skillsRequired: ['Embroidery', 'Pattern Design', 'Kutch Work', 'Chikankari', 'Color Coordination'],
+    trustScore: 91,
+  },
+  {
+    id: 'opp-7',
+    title: 'Jewelry Design Consultant',
+    company: 'Royal Jewelers',
+    location: 'Jaipur, Rajasthan',
+    description: 'Seeking jewelry design consultant with expertise in traditional Indian jewelry making techniques. Role involves creating contemporary designs using traditional methods.',
+    skillsRequired: ['Jewelry Design', 'Metalwork', 'Gem Setting', 'Traditional Techniques', 'CAD Design'],
+    trustScore: 93,
+  },
+  {
+    id: 'opp-8',
+    title: 'Weaving Specialist for Handloom Projects',
+    company: 'Handloom Heritage',
+    location: 'Varanasi, Uttar Pradesh',
+    description: 'Looking for skilled weaver to work on handloom projects and train other artisans. Must have experience with various weaving techniques and loom operation.',
+    skillsRequired: ['Handloom Weaving', 'Loom Operation', 'Pattern Creation', 'Training', 'Quality Control'],
+    trustScore: 94,
+  },
+  {
+    id: 'opp-9',
+    title: 'Bamboo Craft Artisan',
+    company: 'EcoCraft Solutions',
+    location: 'Guwahati, Assam',
+    description: 'Seeking skilled bamboo craft artisan to create eco-friendly products and furniture. Experience with traditional bamboo weaving techniques required.',
+    skillsRequired: ['Bamboo Craft', 'Weaving', 'Furniture Making', 'Eco-friendly Design'],
+    trustScore: 87,
+  },
+  {
+    id: 'opp-10',
+    title: 'Madhubani Painting Instructor',
+    company: 'Art & Culture Center',
+    location: 'Patna, Bihar',
+    description: 'Looking for experienced Madhubani painting artist to teach traditional techniques to students and tourists. Must have deep knowledge of regional art forms.',
+    skillsRequired: ['Madhubani Painting', 'Teaching', 'Traditional Art', 'Cultural Knowledge', 'Workshop Planning'],
+    trustScore: 90,
+  }
 ];
 
 export const artisans: Artisan[] = [
@@ -398,6 +460,136 @@ export const artisans: Artisan[] = [
          completedProjects: 24,
          yearsOfExperience: 5,
      },
+     {
+         id: 'art-21',
+         name: 'Priya Kumari',
+         craft: 'Kundan Jewelry',
+         location: 'Jaipur, Rajasthan',
+         profileImageUrl: 'https://picsum.photos/seed/artisan21/400/300',
+         imageHint: 'jewelry making',
+         rating: 4.8,
+         reviewCount: 142,
+         trustScore: 96,
+         completedProjects: 98,
+         yearsOfExperience: 16,
+     },
+     {
+         id: 'art-22',
+         name: 'Amit Kumar',
+         craft: 'Filigree Work',
+         location: 'Cuttack, Odisha',
+         profileImageUrl: 'https://picsum.photos/seed/artisan22/400/300',
+         imageHint: 'metalwork',
+         rating: 4.6,
+         reviewCount: 89,
+         trustScore: 92,
+         completedProjects: 67,
+         yearsOfExperience: 12,
+     },
+     {
+         id: 'art-23',
+         name: 'Rekha Das',
+         craft: 'Bamboo Craft',
+         location: 'Guwahati, Assam',
+         profileImageUrl: 'https://picsum.photos/seed/artisan23/400/300',
+         imageHint: 'bamboo weaving',
+         rating: 4.4,
+         reviewCount: 76,
+         trustScore: 88,
+         completedProjects: 54,
+         yearsOfExperience: 9,
+     },
+     {
+         id: 'art-24',
+         name: 'Suresh Yadav',
+         craft: 'Blue Pottery',
+         location: 'Jaipur, Rajasthan',
+         profileImageUrl: 'https://picsum.photos/seed/artisan24/400/300',
+         imageHint: 'blue ceramics',
+         rating: 4.7,
+         reviewCount: 118,
+         trustScore: 94,
+         completedProjects: 89,
+         yearsOfExperience: 14,
+     },
+     {
+         id: 'art-25',
+         name: 'Kavita Singh',
+         craft: 'Channapatna Toys',
+         location: 'Channapatna, Karnataka',
+         profileImageUrl: 'https://picsum.photos/seed/artisan25/400/300',
+         imageHint: 'wooden toys',
+         rating: 4.5,
+         reviewCount: 95,
+         trustScore: 91,
+         completedProjects: 72,
+         yearsOfExperience: 11,
+     },
+     {
+         id: 'art-26',
+         name: 'Vikram Patel',
+         craft: 'Bandhani (Tie-Dye)',
+         location: 'Kutch, Gujarat',
+         profileImageUrl: 'https://picsum.photos/seed/artisan26/400/300',
+         imageHint: 'tie dye textiles',
+         rating: 4.3,
+         reviewCount: 68,
+         trustScore: 86,
+         completedProjects: 45,
+         yearsOfExperience: 8,
+     },
+     {
+         id: 'art-27',
+         name: 'Sunita Devi',
+         craft: 'Kutch Embroidery',
+         location: 'Gujarat',
+         profileImageUrl: 'https://picsum.photos/seed/artisan27/400/300',
+         imageHint: 'intricate embroidery',
+         rating: 4.9,
+         reviewCount: 156,
+         trustScore: 98,
+         completedProjects: 124,
+         yearsOfExperience: 18,
+     },
+     {
+         id: 'art-28',
+         name: 'Ravi Kumar',
+         craft: 'Handloom Weaving',
+         location: 'Varanasi, Uttar Pradesh',
+         profileImageUrl: 'https://picsum.photos/seed/artisan28/400/300',
+         imageHint: 'silk weaving',
+         rating: 4.6,
+         reviewCount: 103,
+         trustScore: 93,
+         completedProjects: 78,
+         yearsOfExperience: 13,
+     },
+     {
+         id: 'art-29',
+         name: 'Anita Sharma',
+         craft: 'Pattachitra Painting',
+         location: 'Puri, Odisha',
+         profileImageUrl: 'https://picsum.photos/seed/artisan29/400/300',
+         imageHint: 'scroll painting',
+         rating: 4.4,
+         reviewCount: 71,
+         trustScore: 89,
+         completedProjects: 52,
+         yearsOfExperience: 10,
+     },
+     {
+         id: 'art-30',
+         name: 'Manoj Singh',
+         craft: 'Wood Carving',
+         location: 'Saharanpur, Uttar Pradesh',
+         profileImageUrl: 'https://picsum.photos/seed/artisan30/400/300',
+         imageHint: 'wood carving sculpture',
+         rating: 4.7,
+         reviewCount: 127,
+         trustScore: 95,
+         completedProjects: 96,
+         yearsOfExperience: 15,
+     }
 ];
 
 export const skillClusters: SkillCluster[] = [
@@ -407,4 +599,8 @@ export const skillClusters: SkillCluster[] = [
     { id: 'cluster-4', name: 'Pattachitra Painting', description: 'Traditional cloth-based scroll painting.', coords: { top: '55%', left: '68%' } },
     { id: 'cluster-5', name: 'Kutch Embroidery', description: 'Intricate and colorful embroidery work.', coords: { top: '42%', left: '20%' } },
     { id: 'cluster-6', name: 'Madhubani Art', description: 'Folk paintings from the Mithila region.', coords: { top: '40%', left: '68%' } },
+    { id: 'cluster-7', name: 'Kundan Jewelry', description: 'Traditional Indian jewelry with precious stones.', coords: { top: '30%', left: '40%' } },
+    { id: 'cluster-8', name: 'Filigree Work', description: 'Delicate metalwork with fine wires.', coords: { top: '50%', left: '70%' } },
+    { id: 'cluster-9', name: 'Bamboo Craft', description: 'Traditional bamboo weaving and furniture.', coords: { top: '60%', left: '90%' } },
+    { id: 'cluster-10', name: 'Wood Carving', description: 'Traditional wood carving and furniture making.', coords: { top: '45%', left: '50%' } },
 ];

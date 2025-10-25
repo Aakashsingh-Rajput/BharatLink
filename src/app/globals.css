@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .bg-gold-100 {
+    background-color: #fef3c7;
+  }
+  .text-gold-800 {
+    color: #92400e;
+  }
+}
+
 @layer base {
   :root {
     --background: 60 56% 95%;
@@ -103,4 +112,28 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Ensure rupee symbol displays correctly */
+.rupee-symbol {
+  font-family: 'Noto Sans', 'Arial Unicode MS', sans-serif;
+  font-weight: bold;
+}
+
+/* Fallback for rupee symbol display */
+.rupee-symbol::before {
+  content: '₹';
+  font-family: 'Noto Sans', 'Arial Unicode MS', sans-serif;
+}
+
+/* Map marker hover effects */
+.custom-marker:hover {
+  transform: scale(1.1);
+  transition: transform 0.2s ease-in-out;
+}
+
+/* Cluster marker styles */
+.custom-cluster:hover {
+  transform: scale(1.05);
+  transition: transform 0.2s ease-in-out;
 }
