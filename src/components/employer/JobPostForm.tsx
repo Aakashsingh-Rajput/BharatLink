@@ -62,6 +62,37 @@ const commonSkills = [
   "Event Management",
 ];
 
+const getSalarySuggestion = (type: string, experience: string) => {
+  const suggestions: Record<string, Record<string, string>> = {
+    "Full-time": {
+      "0-1 years": "2,50,000 - 4,00,000",
+      "1-3 years": "3,50,000 - 6,00,000",
+      "3-5 years": "5,00,000 - 8,00,000",
+      "5+ years": "7,00,000 - 12,00,000"
+    },
+    "Part-time": {
+      "0-1 years": "15,000 - 25,000",
+      "1-3 years": "20,000 - 35,000",
+      "3-5 years": "30,000 - 50,000",
+      "5+ years": "40,000 - 70,000"
+    },
+    "Contract": {
+      "0-1 years": "2,00,000 - 3,50,000",
+      "1-3 years": "3,00,000 - 5,00,000",
+      "3-5 years": "4,50,000 - 7,50,000",
+      "5+ years": "6,00,000 - 10,00,000"
+    },
+    "Internship": {
+      "0-1 years": "8,000 - 15,000",
+      "1-3 years": "10,000 - 18,000",
+      "3-5 years": "12,000 - 20,000",
+      "5+ years": "15,000 - 25,000"
+    }
+  };
+  
+  return suggestions[type]?.[experience] || "3,00,000 - 6,00,000";
+};
+
 export function JobPostForm({ onSubmit, initialData, isLoading }: JobPostFormProps) {
   const [formData, setFormData] = useState<JobFormData>({
     title: initialData?.title || "",
@@ -199,7 +230,7 @@ export function JobPostForm({ onSubmit, initialData, isLoading }: JobPostFormPro
                   {formData.salary && (
                     <>
                       <span>•</span>
-                      <span className="font-semibold text-green-600">{formData.salary}</span>
+                      <span className="font-semibold text-green-600">₹{formData.salary}</span>
                     </>
                   )}
                 </div>
@@ -361,13 +392,35 @@ export function JobPostForm({ onSubmit, initialData, isLoading }: JobPostFormPro
               )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="salary">Salary Range</Label>
-              <Input
-                id="salary"
-                value={formData.salary}
-                onChange={(e) => handleInputChange("salary", e.target.value)}
-                placeholder="e.g., ₹6,00,000 - ₹10,00,000"
-              />
+              <Label htmlFor="salary">Salary Range (₹)</Label>
+              <div className="flex gap-2">
+                <div className="relative flex-1">
+                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground font-semibold">₹</span>
+                  <Input
+                    id="salary"
+                    value={formData.salary}
+                    onChange={(e) => handleInputChange("salary", e.target.value)}
+                    placeholder="e.g., 3,00,000 - 6,00,000"
+                    className="pl-8"
+                  />
+                </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    const suggestion = getSalarySuggestion(formData.type, formData.experience);
+                    handleInputChange("salary", suggestion);
+                  }}
+                  disabled={!formData.type || !formData.experience}
+                  className="whitespace-nowrap"
+                >
+                  Suggest
+                </Button>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Enter salary range in Indian Rupees. Click "Suggest" for realistic ranges based on job type and experience.
+              </p>
             </div>
           </div>
 

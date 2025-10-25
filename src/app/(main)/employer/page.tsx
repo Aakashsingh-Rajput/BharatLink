@@ -384,7 +384,7 @@ export default function EmployerDashboard() {
                             {job.salary && (
                               <>
                                 <span>•</span>
-                                <span className="font-semibold text-green-600">{job.salary}</span>
+                                <span className="font-semibold text-green-600">₹{job.salary}</span>
                               </>
                             )}
                           </div>
