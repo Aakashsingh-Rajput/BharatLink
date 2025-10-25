@@ -6,6 +6,7 @@ import {
   type RelevantOpportunitiesOutput,
 } from "@/ai/flows/suggest-relevant-opportunities";
 import { currentUser, Opportunity } from "@/lib/data";
+import { useAuth } from "@/contexts/auth-context";
 import OpportunityCard from "./opportunity-card";
 import { Skeleton } from "../ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
@@ -23,9 +24,13 @@ export default function OpportunityList({
   filters = [], 
   opportunities: providedOpportunities 
 }: OpportunityListProps) {
+  const { user } = useAuth();
   const [aiOpportunities, setAiOpportunities] = useState<RelevantOpportunitiesOutput["opportunities"] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Use authenticated user data or fallback to currentUser for demo purposes
+  const displayUser = user || currentUser;
 
   // Use provided opportunities or fetch from AI
   const allOpportunities = providedOpportunities || aiOpportunities;
@@ -37,9 +42,9 @@ export default function OpportunityList({
         setError(null);
         try {
           const result = await suggestRelevantOpportunities({
-            skills: currentUser.skills,
-            location: currentUser.location,
-            endorsements: currentUser.endorsements.length,
+            skills: displayUser.skills || [],
+            location: displayUser.location || '',
+            endorsements: displayUser.endorsements?.length || 0,
             jobTypes: ["full-time", "contract", "part-time"],
             industry: "Handicrafts",
           });
@@ -54,7 +59,7 @@ export default function OpportunityList({
 
       fetchOpportunities();
     }
-  }, [providedOpportunities]);
+  }, [providedOpportunities, displayUser]);
 
   if (isLoading) {
     return <OpportunityListSkeleton />;
@@ -98,9 +103,19 @@ export default function OpportunityList({
           Showing {allOpportunities.length} result{allOpportunities.length !== 1 ? 's' : ''} for "{searchQuery}"
         </div>
       )}
-      {allOpportunities.map((opp, index) => (
-        <OpportunityCard key={opp.id || index} opportunity={opp} />
-      ))}
+      {allOpportunities.map((opp, index) => {
+        // Ensure the opportunity has all required fields for OpportunityCard
+        const opportunity = {
+          id: (opp as any).id || `ai-${index}`,
+          title: opp.title,
+          company: (opp as any).company || 'AI Suggested',
+          location: opp.location,
+          description: opp.description,
+          skillsRequired: opp.skillsRequired,
+          trustScore: opp.trustScore,
+        };
+        return <OpportunityCard key={opportunity.id} opportunity={opportunity} />;
+      })}
     </div>
   );
 }

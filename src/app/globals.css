@@ -1,8 +1,15 @@
-/* Leaflet CSS - Using CDN instead of local import */
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+  .bg-gold-100 {
+    background-color: #fef3c7;
+  }
+  .text-gold-800 {
+    color: #92400e;
+  }
+}
 
 @layer base {
   :root {
@@ -117,35 +124,6 @@
 .rupee-symbol::before {
   content: '₹';
   font-family: 'Noto Sans', 'Arial Unicode MS', sans-serif;
-}
-
-/* Leaflet Map Custom Styles */
-.leaflet-container {
-  font-family: inherit;
-}
-
-.custom-marker {
-  background: transparent !important;
-  border: none !important;
-}
-
-.custom-cluster {
-  background: transparent !important;
-  border: none !important;
-}
-
-.custom-popup .leaflet-popup-content-wrapper {
-  border-radius: 8px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-}
-
-.custom-popup .leaflet-popup-content {
-  margin: 0;
-  padding: 0;
-}
-
-.custom-popup .leaflet-popup-tip {
-  background: white;
 }
 
 /* Map marker hover effects */

@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/chart";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import { useTranslation } from "@/contexts/translation-context";
+import { useAuth } from "@/contexts/auth-context";
 
 // ✅ FIXED chartData with lowercase skill keys
 const chartData = [
@@ -53,12 +54,16 @@ const chartConfig = {
 
 export default function DashboardPage() {
   const { t } = useTranslation();
+  const { user } = useAuth();
+  
+  // Use authenticated user data or fallback to currentUser for demo purposes
+  const displayUser = user || currentUser;
   
   return (
     <div className="flex flex-col gap-8">
       <div>
         <h1 className="text-3xl font-bold font-headline">
-          {t('dashboard.welcome')}, {currentUser.name.split(" ")[0]}!
+          {t('dashboard.welcome')}, {displayUser.name.split(" ")[0]}!
         </h1>
         <p className="text-muted-foreground">
           {t('dashboard.gateway')}
@@ -84,7 +89,7 @@ export default function DashboardPage() {
             <Star className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{currentUser.endorsements.length}</div>
+            <div className="text-2xl font-bold">{displayUser.endorsements?.length || 0}</div>
             <p className="text-xs text-muted-foreground">{t('dashboard.from_peers')}</p>
           </CardContent>
         </Card>

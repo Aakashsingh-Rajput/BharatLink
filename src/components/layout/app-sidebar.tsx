@@ -22,6 +22,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { useAuth } from "@/contexts/auth-context";
 import { currentUser } from "@/lib/data";
 
 const menuItems = [
@@ -36,6 +37,10 @@ const menuItems = [
 
 export function AppSidebar() {
   const pathname = usePathname();
+  const { user } = useAuth();
+  
+  // Use authenticated user data or fallback to currentUser for demo purposes
+  const displayUser = user || currentUser;
 
   return (
     <>
@@ -66,12 +71,12 @@ export function AppSidebar() {
       <SidebarFooter className="p-4 border-t border-sidebar-border">
           <div className="flex items-center gap-3">
               <Avatar>
-                  <AvatarImage src={currentUser.avatarUrl} alt={currentUser.name} />
-                  <AvatarFallback>{currentUser.name.charAt(0)}</AvatarFallback>
+                  <AvatarImage src={displayUser.avatarUrl} alt={displayUser.name} />
+                  <AvatarFallback>{displayUser.name.charAt(0)}</AvatarFallback>
               </Avatar>
               <div className="flex flex-col overflow-hidden">
-                  <span className="font-semibold truncate">{currentUser.name}</span>
-                  <span className="text-xs text-muted-foreground truncate">{currentUser.location}</span>
+                  <span className="font-semibold truncate">{displayUser.name}</span>
+                  <span className="text-xs text-muted-foreground truncate">{displayUser.location}</span>
               </div>
           </div>
       </SidebarFooter>

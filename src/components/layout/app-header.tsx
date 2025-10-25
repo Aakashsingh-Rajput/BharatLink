@@ -18,7 +18,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { currentUser } from "@/lib/data";
 import { useState, useRef, useCallback } from "react";
 import { speechToText } from "@/ai/flows/speech-to-text";
 import { ChakraLoader } from "../ui/loader";
@@ -87,7 +86,7 @@ export function AppHeader() {
             <Input
               type="search"
               placeholder="Search for skills, artisans, or jobs..."
-              className="w-full appearance-none bg-transparent pl-8 md:w-2/3 lg:w-1/3"
+              className="w-full appearance-none bg-transparent pl-8 md:w-4/5 lg:w-3/5 xl:w-1/2"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />

@@ -1,3 +1,16 @@
+export type MicroCertificate = {
+  id: string;
+  skill: string;
+  issuer: string;
+  issuedDate: string;
+  expiryDate?: string;
+  verificationUrl: string;
+  blockchainHash?: string;
+  qrCodeData: string;
+  level: 'beginner' | 'intermediate' | 'advanced' | 'expert';
+  description: string;
+};
+
 export type User = {
   id: string;
   name: string;
@@ -6,6 +19,8 @@ export type User = {
   skills: string[];
   endorsements: string[];
   bio: string;
+  userType: 'artisan' | 'employer';
+  microCertificates?: MicroCertificate[];
 };
 
 export type Opportunity = {
@@ -46,12 +61,49 @@ export const currentUser: User = {
   location: 'Jaipur, Rajasthan',
   skills: ['Block Printing', 'Natural Dyes', 'Textile Design', 'Handicraft Marketing'],
   bio: 'A passionate 4th generation artisan specializing in traditional Bagru and Sanganeri block printing. Seeking to collaborate with designers to bring ancient crafts to modern markets.',
+  userType: 'artisan',
   endorsements: [
     'Ramesh is a master of his craft. His attention to detail and knowledge of natural dyes is unparalleled. - Local NGO Head',
     'We collaborated with Ramesh for a new collection. He was professional, delivered on time, and the quality was exceptional. - Urban Designer',
     'Has a deep understanding of textile traditions. A valuable asset for anyone in the heritage craft space. - Fellow Artisan',
     'His work is not just craft, it is art. Truly authentic. - International Buyer',
   ],
+  microCertificates: [
+    {
+      id: 'cert-001',
+      skill: 'Block Printing',
+      issuer: 'Rajasthan Handicrafts Board',
+      issuedDate: '2024-01-15',
+      expiryDate: '2027-01-15',
+      verificationUrl: 'https://verify.artisanplatform.com/cert-001',
+      blockchainHash: '0x1a2b3c4d5e6f7890abcdef1234567890abcdef1234567890abcdef1234567890',
+      qrCodeData: 'https://verify.artisanplatform.com/cert-001',
+      level: 'expert',
+      description: 'Certified expert in traditional Bagru and Sanganeri block printing techniques with 15+ years of experience.'
+    },
+    {
+      id: 'cert-002',
+      skill: 'Natural Dyes',
+      issuer: 'Sustainable Textiles Institute',
+      issuedDate: '2023-08-20',
+      verificationUrl: 'https://verify.artisanplatform.com/cert-002',
+      blockchainHash: '0x2b3c4d5e6f7890abcdef1234567890abcdef1234567890abcdef1234567890ab',
+      qrCodeData: 'https://verify.artisanplatform.com/cert-002',
+      level: 'advanced',
+      description: 'Advanced certification in natural dye preparation and application techniques.'
+    },
+    {
+      id: 'cert-003',
+      skill: 'Textile Design',
+      issuer: 'National Institute of Design',
+      issuedDate: '2023-12-10',
+      verificationUrl: 'https://verify.artisanplatform.com/cert-003',
+      blockchainHash: '0x3c4d5e6f7890abcdef1234567890abcdef1234567890abcdef1234567890abcd',
+      qrCodeData: 'https://verify.artisanplatform.com/cert-003',
+      level: 'intermediate',
+      description: 'Professional certification in contemporary textile design principles and digital design tools.'
+    }
+  ]
 };
 
 export const opportunities: Opportunity[] = [

@@ -4,8 +4,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Edit, Mail, MapPin, Quote, Share2, Mic } from "lucide-react";
+import { Edit, Mail, MapPin, Quote, Share2, Mic, Award } from "lucide-react";
 import EndorsementSummary from "@/components/profile/endorsement-summary";
+import { MicroCertificateCard } from "@/components/profile/micro-certificate-card";
+import { CertificateModal } from "@/components/profile/certificate-modal";
 import { useState, useRef, useEffect } from 'react';
 import { speechToText } from "@/ai/flows/speech-to-text";
 import { ChakraLoader } from "@/components/ui/loader";
@@ -14,6 +16,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/contexts/auth-context";
 import { UserInfoSync } from "@/components/profile/user-info-sync";
 import { useTranslation } from "@/contexts/translation-context";
+import { MicroCertificate } from "@/lib/data";
 
 export default function ProfilePage() {
   const { t } = useTranslation();
@@ -31,6 +34,8 @@ export default function ProfilePage() {
   const [isRecording, setIsRecording] = useState<string | null>(null);
   const [isEditingBio, setIsEditingBio] = useState(false);
   const [bioText, setBioText] = useState(currentUser.bio || '');
+  const [selectedCertificate, setSelectedCertificate] = useState<MicroCertificate | null>(null);
+  const [isCertificateModalOpen, setIsCertificateModalOpen] = useState(false);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
@@ -127,6 +132,16 @@ export default function ProfilePage() {
     });
   }
 
+  const handleViewCertificate = (certificate: MicroCertificate) => {
+    setSelectedCertificate(certificate);
+    setIsCertificateModalOpen(true);
+  };
+
+  const handleCloseCertificateModal = () => {
+    setIsCertificateModalOpen(false);
+    setSelectedCertificate(null);
+  };
+
   return (
     <div className="grid gap-8 md:grid-cols-3">
       <div className="md:col-span-1 space-y-8">
@@ -198,6 +213,35 @@ export default function ProfilePage() {
         
         <EndorsementSummary endorsements={currentUser.endorsements || []} />
 
+        {/* Micro-Certificates Section */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="font-headline flex items-center gap-2">
+              <Award className="h-5 w-5 text-primary" />
+              Micro-Certificates ({currentUser.microCertificates?.length || 0})
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {currentUser.microCertificates && currentUser.microCertificates.length > 0 ? (
+              <div className="grid gap-4 md:grid-cols-2">
+                {currentUser.microCertificates.map((certificate) => (
+                  <MicroCertificateCard
+                    key={certificate.id}
+                    certificate={certificate}
+                    onViewDetails={handleViewCertificate}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-8 text-muted-foreground">
+                <Award className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                <p className="text-sm">No micro-certificates yet</p>
+                <p className="text-xs mt-1">Complete skill assessments to earn blockchain-verified certificates</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
         <Card>
           <CardHeader>
             <CardTitle className="font-headline">{t('profile.endorsements')} ({currentUser.endorsements?.length || 0})</CardTitle>
@@ -217,6 +261,13 @@ export default function ProfilePage() {
         {/* Data Sync Demonstration */}
         <UserInfoSync />
       </div>
+
+      {/* Certificate Modal */}
+      <CertificateModal
+        certificate={selectedCertificate}
+        isOpen={isCertificateModalOpen}
+        onClose={handleCloseCertificateModal}
+      />
     </div>
   );
 }
