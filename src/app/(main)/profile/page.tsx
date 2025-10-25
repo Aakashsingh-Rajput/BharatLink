@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Edit, Mail, MapPin, Quote, Share2, Mic } from "lucide-react";
 import EndorsementSummary from "@/components/profile/endorsement-summary";
+import MicroCertificates from "@/components/profile/micro-certificates";
 import { useState, useRef, useEffect } from 'react';
 import { speechToText } from "@/ai/flows/speech-to-text";
 import { ChakraLoader } from "@/components/ui/loader";
@@ -13,16 +14,20 @@ import { useToast } from "@/hooks/use-toast";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/contexts/auth-context";
 import { UserInfoSync } from "@/components/profile/user-info-sync";
+import { currentUser as sampleUser } from "@/lib/data";
 
 export default function ProfilePage() {
   const { user, login } = useAuth();
   const [currentUser, setCurrentUser] = useState(user || {
-    name: 'User',
-    email: '',
-    location: '',
-    bio: '',
-    avatarUrl: '/placeholder-avatar.jpg',
-    userType: 'artisan' as const
+    name: sampleUser.name,
+    email: 'ramesh.kumar@example.com',
+    location: sampleUser.location,
+    bio: sampleUser.bio,
+    avatarUrl: sampleUser.avatarUrl,
+    userType: 'artisan' as const,
+    skills: sampleUser.skills,
+    endorsements: sampleUser.endorsements,
+    microCertificates: sampleUser.microCertificates
   });
   const [isRecording, setIsRecording] = useState<string | null>(null);
   const [isEditingBio, setIsEditingBio] = useState(false);
@@ -77,7 +82,7 @@ export default function ProfilePage() {
               setIsEditingBio(true); // Keep editing mode open to allow saving
             } else if (field === 'skills') {
               const newSkills = result.text.split(',').map(s => s.trim()).filter(Boolean);
-              setCurrentUser(prev => ({ ...prev, skills: [...new Set([...prev.skills, ...newSkills])] }));
+              setCurrentUser(prev => ({ ...prev, skills: [...new Set([...(prev.skills || []), ...newSkills])] }));
               toast({
                 title: "Skills Updated",
                 description: "New skills have been added to your profile.",
@@ -179,7 +184,7 @@ export default function ProfilePage() {
             </Button>
           </CardHeader>
           <CardContent className="flex flex-wrap gap-2">
-            {currentUser.skills.map((skill) => (
+            {(currentUser.skills || []).map((skill) => (
               <Badge key={skill} variant="default" className="text-sm px-3 py-1 bg-primary/20 text-primary-foreground hover:bg-primary/30">
                 {skill}
               </Badge>
@@ -187,14 +192,16 @@ export default function ProfilePage() {
           </CardContent>
         </Card>
         
-        <EndorsementSummary endorsements={currentUser.endorsements} />
+        <EndorsementSummary endorsements={currentUser.endorsements || []} />
+
+        <MicroCertificates certificates={currentUser.microCertificates || []} />
 
         <Card>
           <CardHeader>
-            <CardTitle className="font-headline">Endorsements ({currentUser.endorsements.length})</CardTitle>
+            <CardTitle className="font-headline">Endorsements ({(currentUser.endorsements || []).length})</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {currentUser.endorsements.map((endorsement, index) => (
+            {(currentUser.endorsements || []).map((endorsement, index) => (
               <div key={index} className="flex items-start gap-4 p-4 bg-secondary/50 rounded-lg">
                 <Quote className="h-5 w-5 text-accent flex-shrink-0 mt-1" />
                 <p className="text-sm text-muted-foreground italic">"{endorsement}"</p>

@@ -1,3 +1,14 @@
+export type MicroCertificate = {
+  id: string;
+  title: string;
+  skill: string;
+  issuer: string;
+  dateEarned: string;
+  blockchainHash: string;
+  verificationUrl: string;
+  description: string;
+};
+
 export type User = {
   id: string;
   name: string;
@@ -6,6 +17,7 @@ export type User = {
   skills: string[];
   endorsements: string[];
   bio: string;
+  microCertificates: MicroCertificate[];
 };
 
 export type Opportunity = {
@@ -51,6 +63,38 @@ export const currentUser: User = {
     'We collaborated with Ramesh for a new collection. He was professional, delivered on time, and the quality was exceptional. - Urban Designer',
     'Has a deep understanding of textile traditions. A valuable asset for anyone in the heritage craft space. - Fellow Artisan',
     'His work is not just craft, it is art. Truly authentic. - International Buyer',
+  ],
+  microCertificates: [
+    {
+      id: 'cert-1',
+      title: 'Advanced Block Printing Techniques',
+      skill: 'Block Printing',
+      issuer: 'Rajasthan Handicrafts Board',
+      dateEarned: '2024-01-15',
+      blockchainHash: '0x1a2b3c4d5e6f7890abcdef1234567890abcdef1234567890abcdef1234567890',
+      verificationUrl: 'https://verify.bharatlink.in/cert/0x1a2b3c4d5e6f7890abcdef1234567890abcdef1234567890abcdef1234567890',
+      description: 'Certified in advanced block printing techniques including traditional Bagru and Sanganeri methods with natural dyes.'
+    },
+    {
+      id: 'cert-2',
+      title: 'Natural Dye Mastery',
+      skill: 'Natural Dyes',
+      issuer: 'Indian Textile Heritage Foundation',
+      dateEarned: '2024-02-28',
+      blockchainHash: '0x2b3c4d5e6f7890abcdef1234567890abcdef1234567890abcdef1234567890ab',
+      verificationUrl: 'https://verify.bharatlink.in/cert/0x2b3c4d5e6f7890abcdef1234567890abcdef1234567890abcdef1234567890ab',
+      description: 'Expert certification in natural dye preparation, color extraction, and sustainable textile coloring methods.'
+    },
+    {
+      id: 'cert-3',
+      title: 'Digital Marketing for Artisans',
+      skill: 'Handicraft Marketing',
+      issuer: 'Digital India Skill Development',
+      dateEarned: '2024-03-10',
+      blockchainHash: '0x3c4d5e6f7890abcdef1234567890abcdef1234567890abcdef1234567890abcd',
+      verificationUrl: 'https://verify.bharatlink.in/cert/0x3c4d5e6f7890abcdef1234567890abcdef1234567890abcdef1234567890abcd',
+      description: 'Certified in digital marketing strategies specifically tailored for traditional handicraft businesses and online sales.'
+    }
   ],
 };
 

@@ -2,6 +2,17 @@
 
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 
+interface MicroCertificate {
+  id: string;
+  title: string;
+  skill: string;
+  issuer: string;
+  dateEarned: string;
+  blockchainHash: string;
+  verificationUrl: string;
+  description: string;
+}
+
 interface User {
   name: string;
   email: string;
@@ -10,6 +21,9 @@ interface User {
   bio?: string;
   userType: 'artisan' | 'employer';
   avatarUrl: string;
+  skills?: string[];
+  endorsements?: string[];
+  microCertificates?: MicroCertificate[];
 }
 
 interface AuthContextType {
