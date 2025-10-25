@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 import { AuthProvider } from '@/contexts/auth-context';
 import { TranslationProvider } from '@/contexts/translation-context';
 import { ClientProvider } from '@/components/providers/client-provider';
+import { Chatbot } from '@/components/chatbot/chatbot';
 
 export const metadata: Metadata = {
   title: 'BharatLink – Rural Skill-to-Work Network',
@@ -44,6 +45,7 @@ export default function RootLayout({
             <AuthProvider>
               {children}
               <Toaster />
+              <Chatbot />
             </AuthProvider>
           </TranslationProvider>
         </ClientProvider>

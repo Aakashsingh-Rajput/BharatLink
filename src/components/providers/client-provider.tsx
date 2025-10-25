@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from 'react';
+import { ChatbotProvider } from '@/contexts/chatbot-context';
 
 interface ClientProviderProps {
   children: React.ReactNode;
@@ -23,5 +24,9 @@ export function ClientProvider({ children }: ClientProviderProps) {
     );
   }
 
-  return <>{children}</>;
+  return (
+    <ChatbotProvider>
+      {children}
+    </ChatbotProvider>
+  );
 }
